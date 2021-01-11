@@ -1,0 +1,157 @@
+.top-spacing{
+    margin:3%;
+  }
+  
+  .wrapper{
+    display:grid;
+    border:1px solid lightpink;
+    padding:20px;
+    border-radius: 6px;
+    background:var(--primary-card-item);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    color:var(--text-color);
+  }
+  .title{
+    font-size:20px;
+    font-weight: bold;
+    padding:5px 10px;
+    border-bottom:2px solid rgba(41, 89, 104, 0.2);
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
+  }
+  .content{
+    font-size:16px;
+    padding:5px 10px;
+    height:70px;
+    overflow:auto;
+  }
+  .category{
+    font-size: 14px;
+    padding:5px 10px;
+  }
+  span{
+    background:#535d5f1a;
+    padding:5px;
+    border-radius:20%;
+  }
+  .position-right{
+    justify-content: right;
+    display: grid;
+  }
+  ul{
+    list-style-type: none;
+    margin: 0px;
+    display: flex;
+  }
+  li{
+    padding:0 10px;
+  }
+  .title__a{
+    text-decoration: none;
+    color:var(--text-color);
+  }
+  .top-margin{
+    margin-top:5%;
+  }
+  .btn-display{
+    margin:0 10px;
+    padding:10px;
+    background:var(--add-btn-color);
+    color:var(--text-color);
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    border:none;
+    display:block;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+  }
+   
+  form {
+    display: grid;
+    padding: 2.5em;
+    background: #f9f9f9;
+    border: 1px solid #c1c1c1;
+    margin: 2rem auto 0 auto;
+    max-width: 600px;
+  }
+  form input {
+    background: #fff;
+  }
+  form button {
+    background: #1976d2;
+    padding: 0.7em;
+    width: 100%;
+    border: 0;
+    color:#ffffff;
+    font-weight: 600;
+  }
+
+  label {
+    padding: 0.5em 0.5em 0.5em 0;
+  }
+  
+  input {
+    padding: 0.7em;
+  }
+  input:focus {
+    outline: 3px solid gold;
+  }
+  .formTitle{
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+  }
+  .err{
+    display: grid;
+    grid-column: 1 / span 2;
+    text-align: center;
+    margin: 0 0 16px;
+    height:20px;
+  }
+  .emailerr{
+    grid-row: 2;
+  }
+  .pwdError{
+    grid-row: 4;
+  }
+  .catError{
+    grid-row: 6;
+  }
+  
+  .ng-valid:not(form)   {
+    border-left: 5px solid #42A948; /* green */
+  }
+  
+  .ng-invalid:not(form)  {
+    border-left: 5px solid #a94442; /* red */
+  }
+  .input-margin{
+    margin-bottom: 5%;
+  }
+  @media(max-width:766px){
+    .top-margin{
+        margin-top:15%;
+    }
+    .content{
+      height:100px;
+  }
+  .form1{
+    margin-top:25%;
+    grid-template-columns: max-content;
+   }
+  }
+  @media (min-width: 400px) {
+    form {
+      grid-template-columns: 150px 1fr;
+    }
+  
+    label {
+      text-align: right;
+      grid-column: 1 / 2;
+    }
+  
+    input,
+    button {
+      grid-column: 2 / 3;
+    }
+  }

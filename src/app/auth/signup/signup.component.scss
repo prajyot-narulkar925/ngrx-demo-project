@@ -1,0 +1,79 @@
+.top-margin{
+    margin-top:5%;
+  }
+  form {
+      display: grid;
+      padding: 2.5em;
+      background:var(--primary-card-item);
+      border: 1px solid #c1c1c1;
+      margin: 2rem auto 0 auto;
+      max-width: 600px;
+    }
+    form input {
+      background: #fff;
+    }
+    form button {
+      background: lightgrey;
+      padding: 0.7em;
+      width: 100%;
+      border: 0;
+    }
+  
+    
+    label {
+      padding: 0.5em 0.5em 0.5em 0;
+      color:var(--text-color);
+  }
+    
+    input {
+      padding: 0.7em;
+    }
+    .err{
+      display: grid;
+      grid-column: 1 / span 2;
+      text-align: center;
+      margin: 0 0 16px;
+      height:20px;
+    }
+    .fnameerr{
+      grid-row: 2;
+    }
+    .lnameError{
+      grid-row: 4;
+    }
+    .emailerr{
+      grid-row: 6;
+    }
+    .pwdError{
+      grid-row: 8;
+    }
+  
+    .ng-valid:not(form)   {
+      border-left: 5px solid #42A948; /* green */
+    }
+    
+    .ng-invalid:not(form)  {
+      border-left: 5px solid #a94442; /* red */
+    }
+    @media (max-width:766px){
+        .form1{
+            margin-top:25%;
+            grid-template-columns: max-content;
+            display: bl;
+           }
+    }
+    @media (min-width: 400px) {
+      form {
+        grid-template-columns: 150px 1fr;
+      }
+    
+      label {
+        text-align: right;
+        grid-column: 1 / 2;
+      }
+    
+      input,
+      button {
+        grid-column: 2 / 3;
+      }
+    }

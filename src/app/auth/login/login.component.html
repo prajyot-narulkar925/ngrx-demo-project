@@ -1,0 +1,24 @@
+<div class="top-margin">
+    <!-- <span class="err error-red" *ngIf="errorMessage | async as error">{{error}}</span> -->
+  </div>
+  <form class="form1" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+    
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email">
+    <div class="err emailerr">
+      <div *ngIf="!loginForm.get('email').valid&&loginForm.get('email').touched">
+        <span class="error-red" *ngIf = "loginForm.get('email').hasError('pattern')">Entered data has error!</span>
+        <span class="error-red" *ngIf = "loginForm.get('email').hasError('required')">Field is required!</span>
+        </div> 
+    </div>
+  
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password">
+    <div class="err pwdError">
+      <div *ngIf="!loginForm.get('password').valid&&loginForm.get('password').touched">
+        <span *ngIf = "loginForm.get('password').errors?.minlength">Minlength 6 is invalid!</span>
+        <span class="error-red" *ngIf = "loginForm.get('password').hasError('required')">Field is required!</span>
+        </div> 
+    </div>
+    <button [disabled]="loginForm.invalid">Login</button>
+  </form>

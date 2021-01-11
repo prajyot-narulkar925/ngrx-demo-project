@@ -1,0 +1,55 @@
+
+<div class=" top-margin">
+    <span class="err error-red" *ngIf="errorMessage | async as error">{{error}}</span>
+  </div>
+  
+  <form class="form1" [formGroup]="registerForm" (ngSubmit)="onSignUpSubmit()">
+    
+    <label for="email">First Name</label>
+    <input id="fname" type="test" formControlName="firstName">
+    <div class="err fnameerr">
+      <div *ngIf="!registerForm.get('firstName').valid&&registerForm.get('firstName').touched">
+        <span class="error-red" *ngIf = "registerForm.get('firstName').hasError('required')">Field is required!</span>
+        <span class="error-red" *ngIf = "registerForm.get('firstName').errors?.minlength">Minlength 4 is require!</span>
+        </div> 
+    </div>
+  
+    <label for="lname">Last Name</label>
+    <input id="lname" type="text" formControlName="lastName">
+    <div class="err lnameerr">
+      <div *ngIf="!registerForm.get('lastName').valid&&registerForm.get('lastName').touched">
+        <span class="error-red" *ngIf = "registerForm.get('lastName').hasError('required')">Field is required!</span>
+        <span class="error-red" *ngIf = "registerForm.get('lastName').errors?.minlength">Minlength 4 is required!</span>
+        </div> 
+    </div>
+  
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email">
+    <div class="err emailerr">
+      <div *ngIf="!registerForm.get('email').valid&&registerForm.get('email').touched">
+        <span class="error-red" *ngIf = "registerForm.get('email').hasError('email')">Entered data has error!</span>
+        
+        <span class="error-red" *ngIf = "registerForm.get('email').hasError('required')">Field is required!</span>
+        </div> 
+    </div>
+  
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password">
+    <div class="err pwdError">
+      <div *ngIf="!registerForm.get('password').valid&&registerForm.get('password').touched">
+        <span class="error-red" *ngIf = "registerForm.get('password').hasError('required')">Field is required!</span>
+        <span *ngIf = "registerForm.get('password').errors?.minlength">Minlength 6 is invalid!</span>
+      </div> 
+    </div>
+  
+    <!-- <label for="confirmpassword">Confirm Password</label>
+    <input id="confirmPassword" type="password" formControlName="confirmPassword">
+    <div class="err cpwdError">
+      <div *ngIf="!registerForm.get('confirmPassword').valid&&registerForm.get('confirmPassword').touched">
+        <span class="error-red" *ngIf = "registerForm.get('confirmPassword').hasError('required')">Field is required!</span>
+        <span *ngIf = "registerForm.get('confirmPassword').errors?.minlength">Minlength 6 is invalid!</span>
+        <span class="error-red" *ngIf = "registerForm.get('confirmPassword').hasError('mustMatch')">Fields should match!</span>
+      </div> 
+    </div> -->
+    <button [disabled]="registerForm.invalid">Register</button>
+  </form>

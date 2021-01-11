@@ -1,0 +1,90 @@
+{
+  "books": [
+    {
+      "id": "3",
+      "title": "Speaking JavaScript",
+      "description": "Like it or not, JavaScript is everywhere these days-from browser to server to mobile-and now you, too, need to learn the language or dive deeper than you have. This concise book guides you into and through JavaScript, written by a veteran programmer who once found himself in the same position.",
+      "category": "Coding"
+    },
+    {
+      "id": "4",
+      "title": "Coding JavaScript Applications",
+      "description": "Take advantage of JavaScript's power to build robust web-scale or enterprise applications that are easy to extend and maintain. By applying the design patterns outlined in this practical book, experienced JavaScript developers will learn how to write flexible and resilient code that's easier-yes, easier-to work with as your code base grows.",
+      "category": "Coding"
+    },
+    {
+      "id": "5",
+      "title": "Understanding ECMAScript 6",
+      "description": "ECMAScript 6 represents the biggest update to the core of JavaScript in the history of the language. In Understanding ECMAScript 6, expert developer Nicholas C. Zakas provides a complete guide to the object types, syntax, and other exciting changes that ECMAScript 6 brings to JavaScript.",
+      "category": "Coding"
+    },
+    {
+      "id": "6",
+      "title": "You Don't Know JS",
+      "description": "No matter how much experience you have with JavaScript, odds are you don’t fully understand the language. As part of the 'You Don’t Know JS' series, this compact guide focuses on new features available in ECMAScript 6 (ES6), the latest version of the standard upon which JavaScript is built.",
+      "category": "Coding"
+    },
+    {
+      "id": "7",
+      "title": "Git Pocket Guide",
+      "description": "This pocket guide is the perfect on-the-job companion to Git, the distributed version control system. It provides a compact, readable introduction to Git for new users, as well as a reference to common commands and procedures for those of you with Git experience.",
+      "category": "Learn"
+    },
+    {
+      "id": "65bbd5de-c9bb-4ae1-9302-b63b71f49dbe",
+      "title": "Coding JavaScript Applications",
+      "description": "Take advantage of power to build robust web-scale or enterprise applications that are easy to extend and maintain. By applying the design patterns outlined in this practical book, experienced JavaScript developers will learn how to write flexible and resilient code that's easier-yes, easier-to work with as your code base grows.",
+      "category": "Coding"
+    },
+    {
+      "id": "3dca3769-6696-4571-b712-81611f96cca6",
+      "title": "Coding JavaScript Applications",
+      "description": "This pocket guide is the perfect on-the-job companion to Git, the distributed version control system. It provides a compact, readable introduction to Git for new users, as well as a reference to common commands and procedures for those of you with Git experience.",
+      "category": "Coding"
+    }
+  ],
+  "users": [
+    {
+      "id": "ab865ef3-dccd-416b-8750-4af61dd63185",
+      "email": "prajyotnarulkar@gmail.com",
+      "firstname": "prajyot",
+      "lastname": "Narulkar",
+      "password": "111111"
+    },
+    {
+      "id": "8a061d01-9422-4f6f-b917-51eb50012b13",
+      "email": "demo@test.com",
+      "firstname": "Test",
+      "lastname": "Demo",
+      "password": "test123"
+    },
+    {
+      "id": "b6c2b848-41e4-4b48-b5d3-3c1a869ee011",
+      "email": "test@demo.com",
+      "firstname": "demo",
+      "lastname": "test",
+      "password": "111111"
+    },
+    {
+      "id": "338e839f-2a40-498c-9391-ff9ab078b9b2",
+      "email": "test@demo.com",
+      "firstname": "demo",
+      "lastname": "test",
+      "password": "111111"
+    },
+    {
+      "id": "f1746a4e-b1c9-48d5-acb0-ee861dc91f3e",
+      "email": "test@demo.com",
+      "firstname": "demo",
+      "lastname": "test",
+      "password": "111111"
+    },
+    {
+      "id": "c4c18257-0928-4790-baad-4f852c574c4c",
+      "email": "test@test.com",
+      "firstname": "Test",
+      "lastname": "test",
+      "password": "111111"
+    }
+  ]
+}

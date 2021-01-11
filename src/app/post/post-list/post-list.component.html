@@ -1,0 +1,74 @@
+<div>
+    <div class="top-margin">
+      <button class="btn-display" (click)="showAddForm()" *ngIf="(showActions | async)">Add New Item</button>
+      <div *ngIf="isAddActivated">
+        <form class="form1" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    
+          <label for="title">Title</label>
+          <input id="title" type="text" formControlName="title">
+          <div class="err emailerr">
+            <div *ngIf="!createForm.get('title').valid&&createForm.get('title').touched">
+              <span class="error-red" *ngIf = "createForm.get('title').hasError('required')">Field is required!</span>
+              </div> 
+          </div>
+    
+          <label for="description">Description</label>
+          <input id="description" type="textarea" formControlName="description">
+          <div class="err pwdError">
+            <div *ngIf="!createForm.get('description').valid&&createForm.get('description').touched">
+              <span class="error-red" *ngIf = "createForm.get('description')?.hasError('required')">Field is required!</span>
+              </div> 
+          </div>
+  
+          <label for="category">Category</label>
+          <input id="category" type="text" formControlName="category">
+          <div class="err catError">
+            <div *ngIf="!createForm.get('category').valid&&createForm.get('category').touched">
+              <span class="error-red" *ngIf = "createForm.get('category').hasError('required')">Field is required!</span>
+              </div> 
+          </div>
+          <button [disabled]="createForm.invalid" >Submit</button>
+        </form>
+      </div>
+  <div *ngIf="posts | async as postsData">
+    <div *ngFor="let item of postsData" >
+      <div class="top-spacing">
+        <div class="wrapper">
+            <div class="title">
+              <div>{{item?.title}}</div>
+            <div class="position-right" *ngIf="(showActions | async)">
+                <ul>
+                    <li><i class="fal fa-pencil" (click)="showUpdateForm(item);openModal(item?.id)"></i></li>
+                    <li><i class="fal fa-trash" (click)="onDeletePost(item?.id)"></i></li>
+                </ul>
+            </div>
+        </div>
+            <div class="content">{{item?.description}}</div>
+            <div class="category">
+                <span>{{item?.category}}</span>
+            </div>
+          </div>
+  
+    </div>
+    <jw-modal id="{{item?.id}}">
+      
+            <div *ngIf="isUpdateActivated"> 
+            <form (ngSubmit)="updateCourse(updateForm)" #updateForm="ngForm" class="form1">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required [(ngModel)]="courseToBeUpdated.title" class="input-margin"/>
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" required [(ngModel)]="courseToBeUpdated.description" class="input-margin"/>
+  
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" required [(ngModel)]="courseToBeUpdated.category" class="input-margin"/>
+              <button [disabled]="updateForm.invalid" class="btn btn-primary" type="submit">Update</button>
+            </form>
+           </div>
+  </jw-modal>
+    </div>
+  </div>
+    </div>
+  
+    
+  </div>
+  
