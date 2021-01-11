@@ -66,23 +66,16 @@
       "password": "111111"
     },
     {
-      "id": "338e839f-2a40-498c-9391-ff9ab078b9b2",
-      "email": "test@demo.com",
-      "firstname": "demo",
-      "lastname": "test",
-      "password": "111111"
-    },
-    {
-      "id": "f1746a4e-b1c9-48d5-acb0-ee861dc91f3e",
-      "email": "test@demo.com",
-      "firstname": "demo",
-      "lastname": "test",
-      "password": "111111"
-    },
-    {
       "id": "c4c18257-0928-4790-baad-4f852c574c4c",
       "email": "test@test.com",
       "firstname": "Test",
+      "lastname": "test",
+      "password": "123456"
+    },
+    {
+      "id": "c15b3d3b-53a7-428b-997e-3c88dfed644b",
+      "email": "test@praj.com",
+      "firstname": "prajyot",
       "lastname": "test",
       "password": "111111"
     }

@@ -26,8 +26,6 @@ export class AuthEffects {
         return this.authService.login(action.email, action.password).pipe(
           map((data) => {
             this.store.dispatch(setErrorMessage({ message: '' }));
-            console.log(data);
-            debugger;
             const res = data[0];
             const user = this.authService.formatUser(res);
             this.authService.setUserInLocalStorage(user);

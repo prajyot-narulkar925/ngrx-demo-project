@@ -121,8 +121,11 @@ describe('SignupComponent', () => {
 
   xit('submitting a form emits a user', () => {
     expect(component.registerForm.valid).toBeFalsy();
-    component.registerForm.controls['email'].setValue("test@test.com");
-    component.registerForm.controls['password'].setValue("123456789");
+    component.registerForm.controls.firstName.setValue('abcd');
+    component.registerForm.controls.lastName.setValue('pqrd');
+    component.registerForm.controls.email.setValue('test@demo.com');
+    component.registerForm.controls.password.setValue('123456');
+
     expect(component.registerForm.valid).toBeTruthy();
 
     // let user: User;

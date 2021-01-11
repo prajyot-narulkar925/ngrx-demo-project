@@ -11,4 +11,3 @@ export const getPostEntities = createSelector(
   postsSelectors.selectEntities
 );
 
-export const getCount = createSelector(getPostsState, (state) => state.count);

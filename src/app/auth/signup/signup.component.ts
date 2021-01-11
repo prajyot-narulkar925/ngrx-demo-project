@@ -35,9 +35,7 @@ export class SignupComponent implements OnInit {
   }
 
   onSignUpSubmit() {
-    if (!this.registerForm.valid) {
-      return;
-    }
+
     const email = this.registerForm.value.email;
     const password = this.registerForm.value.password;
     const firstname = this.registerForm.value.firstName;

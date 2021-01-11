@@ -32,5 +32,8 @@ describe('PostListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  
+  it("should show add form on button click",()=>{
+    component.showAddForm();
+    expect(component.isAddActivated).toEqual(true);
+  })
 });

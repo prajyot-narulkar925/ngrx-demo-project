@@ -8,8 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-	"mock:server": "json-server --watch mocks/data.json"
-
+    "mock:server": "json-server --watch mocks/data.json",
+    "docs:json": "compodoc -p ./tsconfig.json -e json -d .",
+    "storybook": "npm run docs:json && start-storybook -p 6006",
+    "build-storybook": "npm run docs:json && build-storybook"
   },
   "private": true,
   "dependencies": {
@@ -37,10 +39,17 @@
     "@angular-devkit/build-angular": "~0.1001.4",
     "@angular/cli": "~10.1.4",
     "@angular/compiler-cli": "~10.1.4",
-    "@types/jest": "26.0.20",
-    "@types/node": "^12.11.1",
+    "@babel/core": "^7.12.10",
+    "@compodoc/compodoc": "^1.1.11",
+    "@storybook/addon-actions": "^6.1.11",
+    "@storybook/addon-essentials": "^6.1.11",
+    "@storybook/addon-links": "^6.1.11",
+    "@storybook/angular": "^6.1.11",
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
+    "@types/jest": "26.0.20",
+    "@types/node": "^12.11.1",
+    "babel-loader": "^8.2.2",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -52,5 +61,5 @@
   },
   "jest": {
     "testEnvironment": "node"
- }
+  }
 }

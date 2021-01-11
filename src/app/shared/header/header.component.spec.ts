@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeaderComponent } from './header.component';
 
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { ThemeService } from 'src/app/theme/theme.service';
+import { dark, light } from 'src/app/theme/theme';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -29,4 +31,26 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it("should change theme to dark",()=>{
+    const themeService:ThemeService =  TestBed.get(ThemeService);
+    const fixture = TestBed.createComponent(HeaderComponent);
+    const app = fixture.componentInstance;
+
+    themeService.setActiveTheme(dark);
+    app.toggleTheme();
+
+    expect(themeService.getActiveTheme()).toEqual(light);
+  });
+
+  it("should change theme to light",()=>{
+    const themeService:ThemeService =  TestBed.get(ThemeService);
+    const fixture = TestBed.createComponent(HeaderComponent);
+    const app = fixture.componentInstance;
+
+    themeService.setActiveTheme(light);
+    app.toggleTheme();
+
+    expect(themeService.getActiveTheme()).toEqual(dark);
+  })
 });

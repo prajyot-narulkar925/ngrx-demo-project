@@ -46,8 +46,8 @@ export class PostListComponent implements OnInit {
       this.store.dispatch(deletePost({ id }));
     }
   }
-  showUpdateForm(course: Post) {
-    this.courseToBeUpdated = {...course};
+  showUpdateForm(post: Post) {
+    this.courseToBeUpdated = {...post};
 
     this.isUpdateActivated = true;
   }
