@@ -16,7 +16,7 @@ import { PostsEffects } from './state/posts.effects';
 const routes: Routes = [
   {
     path: '',
-    component: PostListComponent,
+    component: PostListComponent
   },
 ];
 

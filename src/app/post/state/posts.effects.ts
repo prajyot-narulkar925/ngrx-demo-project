@@ -57,7 +57,7 @@ export class PostsEffects {
         return this.postsService.updatePost(action.post).pipe(
           map((data) => {
             const updatedPost: Update<Post> = {
-              id: action.post.id,
+              id: action.post?.id,
               changes: {
                 ...action.post,
               },
@@ -72,9 +72,9 @@ export class PostsEffects {
     return this.actions$.pipe(
       ofType(deletePost),
       switchMap((action) => {
-        return this.postsService.deletePost(action.id).pipe(
+        return this.postsService.deletePost(action?.id).pipe(
           map((data) => {
-            return deletePostSuccess({ id: action.id });
+            return deletePostSuccess({ id: action?.id });
           })
         );
       })

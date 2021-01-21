@@ -9,11 +9,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth/state/auth.effects';
 import { StoreModule } from '@ngrx/store';
 import { appReducer } from './store/app.state';
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    // FontAwesomeModule
   ],
   imports: [
     BrowserModule,

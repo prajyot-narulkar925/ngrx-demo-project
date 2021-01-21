@@ -6,7 +6,7 @@
     <label for="email">Email</label>
     <input id="email" type="email" formControlName="email">
     <div class="err emailerr">
-      <div *ngIf="!loginForm.get('email').valid&&loginForm.get('email').touched">
+      <div *ngIf="submitted || (!loginForm.get('email').valid&&loginForm.get('email').touched)">
         <span class="error-red" *ngIf = "loginForm.get('email').hasError('pattern')">Entered data has error!</span>
         <span class="error-red" *ngIf = "loginForm.get('email').hasError('required')">Field is required!</span>
         </div> 
@@ -15,10 +15,10 @@
     <label for="password">Password</label>
     <input id="password" type="password" formControlName="password">
     <div class="err pwdError">
-      <div *ngIf="!loginForm.get('password').valid&&loginForm.get('password').touched">
+      <div *ngIf="submitted || (!loginForm.get('password').valid&&loginForm.get('password').touched)">
         <span *ngIf = "loginForm.get('password').errors?.minlength">Minlength 6 is invalid!</span>
         <span class="error-red" *ngIf = "loginForm.get('password').hasError('required')">Field is required!</span>
         </div> 
     </div>
-    <button [disabled]="loginForm.invalid">Login</button>
+    <button [disabled]="loginForm.invalid" >Login</button>
   </form>

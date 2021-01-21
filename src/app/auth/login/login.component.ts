@@ -1,3 +1,4 @@
+import { EventEmitter, Input, Output } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -13,8 +14,11 @@ import { loginStart } from '../state/auth.actions';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
-  errorMessage: Observable<string>;
+  // loginForm: FormGroup;
+  // errorMessage: Observable<string>;
+  @Input() loginForm:FormGroup;
+  submitted=false
+  // @Output() btnClicked = new EventEmitter<boolean>();
 
   constructor(private store: Store<AppState>) {}
 
@@ -23,13 +27,19 @@ export class LoginComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
-    this.errorMessage = this.store.select(getErrorMessage);
+    // this.errorMessage = this.store.select(getErrorMessage);
 
   }
   onLoginSubmit() {
+    this.submitted = true;
+    if (this.loginForm.invalid){
+      return;
+    }
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
     this.store.dispatch(loginStart({ email, password }));
+    this.submitted=false;
+    this.loginForm.reset();
   }
 
 }

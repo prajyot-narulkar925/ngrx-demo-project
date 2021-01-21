@@ -14,7 +14,8 @@ import * as uuid from 'uuid';
 })
 export class SignupComponent implements OnInit {
   registerForm: FormGroup;
-  errorMessage: Observable<string>;
+  // errorMessage: Observable<string>;
+  submitted = false;
 
   constructor(private store: Store<AppState>) {}
 
@@ -30,12 +31,15 @@ export class SignupComponent implements OnInit {
   //     validator: PasswordMustMatch('password', 'confirmPassword')
   // }
   );
-    this.errorMessage = this.store.select(getErrorMessage);
+    // this.errorMessage = this.store.select(getErrorMessage);
 
   }
 
   onSignUpSubmit() {
-
+    this.submitted = true;
+    if (this.registerForm.invalid){
+      return;
+    }
     const email = this.registerForm.value.email;
     const password = this.registerForm.value.password;
     const firstname = this.registerForm.value.firstName;
@@ -43,6 +47,8 @@ export class SignupComponent implements OnInit {
     const uniqueid = uuid.v4();
 
     this.store.dispatch(signupStart({ email, password,firstname,lastname,uniqueid }));
+    this.submitted = false;
+    this.registerForm.reset();
   }
 
 }

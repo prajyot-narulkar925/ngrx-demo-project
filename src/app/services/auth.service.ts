@@ -36,10 +36,10 @@ export class AuthService {
   formatUser(data: AuthResponseData) {
 
     const user = new User(
-      data.email,
-      data.id,
-      data.firstname,
-      data.lastname
+      data?.email,
+      data?.id,
+      data?.firstname,
+      data?.lastname
     );
     return user;
   }
@@ -67,10 +67,10 @@ export class AuthService {
     if (userDataString) {
       const userData = JSON.parse(userDataString);
       const user = new User(
-        userData.email,
-        userData.token,
-        userData.firstname,
-        userData.lastname,
+        userData?.email,
+        userData?.token,
+        userData?.firstname,
+        userData?.lastname,
       );
       return user;
     }

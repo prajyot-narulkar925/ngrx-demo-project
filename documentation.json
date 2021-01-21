@@ -242,7 +242,7 @@
     "injectables": [
         {
             "name": "AuthEffects",
-            "id": "injectable-AuthEffects-88c9abc960cfa5f8f3e1a0186487a1eb",
+            "id": "injectable-AuthEffects-71fdcb5c66920070dca05c0f921271b8",
             "file": "src/app/auth/state/auth.effects.ts",
             "properties": [
                 {
@@ -251,11 +251,11 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 82
+                    "line": 81
                 },
                 {
                     "name": "login$",
-                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loginStart),\r\n      exhaustMap((action) => {\r\n        console.log(action);\r\n        return this.authService.login(action.email, action.password).pipe(\r\n          map((data) => {\r\n            this.store.dispatch(setErrorMessage({ message: '' }));\r\n            const res = data[0];\r\n            const user = this.authService.formatUser(res);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return loginSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
+                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loginStart),\r\n      exhaustMap((action) => {\r\n        return this.authService.login(action.email, action.password).pipe(\r\n          map((data) => {\r\n            this.store.dispatch(setErrorMessage({ message: '' }));\r\n            const res = data[0];\r\n            const user = this.authService.formatUser(res);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return loginSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
                     "type": "",
                     "optional": false,
                     "description": "",
@@ -267,7 +267,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 45
+                    "line": 44
                 },
                 {
                     "name": "logout$",
@@ -275,7 +275,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 92
+                    "line": 91
                 },
                 {
                     "name": "signUp$",
@@ -283,12 +283,12 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 60
+                    "line": 59
                 }
             ],
             "methods": [],
             "description": "",
-            "sourceCode": "import { setErrorMessage} from './../../store/Shared/shared.actions';\r\nimport { AuthService } from './../../services/auth.service';\r\nimport { exhaustMap, map, catchError, tap, mergeMap } from 'rxjs/operators';\r\nimport { autoLogin, autoLogout, loginStart, loginSuccess, signupStart, signupSuccess} from './auth.actions';\r\nimport { Actions, createEffect, ofType } from '@ngrx/effects';\r\nimport { Injectable } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { of } from 'rxjs';\r\nimport { Router } from '@angular/router';\r\n\r\n@Injectable()\r\nexport class AuthEffects {\r\n  constructor(\r\n    private actions$: Actions,\r\n    private authService: AuthService,\r\n    private store: Store<AppState>,\r\n    private router: Router\r\n  ) {}\r\n\r\n  login$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loginStart),\r\n      exhaustMap((action) => {\r\n        console.log(action);\r\n        return this.authService.login(action.email, action.password).pipe(\r\n          map((data) => {\r\n            this.store.dispatch(setErrorMessage({ message: '' }));\r\n            const res = data[0];\r\n            const user = this.authService.formatUser(res);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return loginSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  loginRedirect$ = createEffect(\r\n    () => {\r\n      return this.actions$.pipe(\r\n        ofType(...[loginSuccess, signupSuccess]),\r\n        tap((action) => {\r\n          this.store.dispatch(setErrorMessage({ message: '' }));\r\n          if (action.redirect) {\r\n            this.router.navigate(['/']);\r\n          }\r\n        })\r\n      );\r\n    },\r\n    { dispatch: false }\r\n  );\r\n\r\n  signUp$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(signupStart),\r\n      exhaustMap((action) => {\r\n        // console.log(action);\r\n        return this.authService.signUp(action.email, action.password,action.firstname,action.lastname,action.uniqueid).pipe(\r\n          map((data) => {\r\n            const user = this.authService.formatUser(data);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return signupSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  autoLogin$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(autoLogin),\r\n      mergeMap((action) => {\r\n        const user = this.authService.getUserFromLocalStorage();\r\n        return of(loginSuccess({ user, redirect: false }));\r\n      })\r\n    );\r\n  });\r\n\r\n  logout$ = createEffect(\r\n    () => {\r\n      return this.actions$.pipe(\r\n        ofType(autoLogout),\r\n        map((action) => {\r\n          this.authService.logout();\r\n          this.router.navigate(['/']);\r\n        })\r\n      );\r\n    },\r\n    { dispatch: false }\r\n  );\r\n}\r\n",
+            "sourceCode": "import { setErrorMessage} from './../../store/Shared/shared.actions';\r\nimport { AuthService } from './../../services/auth.service';\r\nimport { exhaustMap, map, catchError, tap, mergeMap } from 'rxjs/operators';\r\nimport { autoLogin, autoLogout, loginStart, loginSuccess, signupStart, signupSuccess} from './auth.actions';\r\nimport { Actions, createEffect, ofType } from '@ngrx/effects';\r\nimport { Injectable } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { of } from 'rxjs';\r\nimport { Router } from '@angular/router';\r\n\r\n@Injectable()\r\nexport class AuthEffects {\r\n  constructor(\r\n    private actions$: Actions,\r\n    private authService: AuthService,\r\n    private store: Store<AppState>,\r\n    private router: Router\r\n  ) {}\r\n\r\n  login$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loginStart),\r\n      exhaustMap((action) => {\r\n        return this.authService.login(action.email, action.password).pipe(\r\n          map((data) => {\r\n            this.store.dispatch(setErrorMessage({ message: '' }));\r\n            const res = data[0];\r\n            const user = this.authService.formatUser(res);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return loginSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  loginRedirect$ = createEffect(\r\n    () => {\r\n      return this.actions$.pipe(\r\n        ofType(...[loginSuccess, signupSuccess]),\r\n        tap((action) => {\r\n          this.store.dispatch(setErrorMessage({ message: '' }));\r\n          if (action.redirect) {\r\n            this.router.navigate(['/']);\r\n          }\r\n        })\r\n      );\r\n    },\r\n    { dispatch: false }\r\n  );\r\n\r\n  signUp$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(signupStart),\r\n      exhaustMap((action) => {\r\n        // console.log(action);\r\n        return this.authService.signUp(action.email, action.password,action.firstname,action.lastname,action.uniqueid).pipe(\r\n          map((data) => {\r\n            const user = this.authService.formatUser(data);\r\n            this.authService.setUserInLocalStorage(user);\r\n            return signupSuccess({ user, redirect: true });\r\n          }),\r\n          catchError((errResp) => {\r\n            const errorMessage = this.authService.getErrorMessage(\r\n              errResp.error.error.message\r\n            );\r\n            return of(setErrorMessage({ message: errorMessage }));\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  autoLogin$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(autoLogin),\r\n      mergeMap((action) => {\r\n        const user = this.authService.getUserFromLocalStorage();\r\n        return of(loginSuccess({ user, redirect: false }));\r\n      })\r\n    );\r\n  });\r\n\r\n  logout$ = createEffect(\r\n    () => {\r\n      return this.actions$.pipe(\r\n        ofType(autoLogout),\r\n        map((action) => {\r\n          this.authService.logout();\r\n          this.router.navigate(['/']);\r\n        })\r\n      );\r\n    },\r\n    { dispatch: false }\r\n  );\r\n}\r\n",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -346,7 +346,7 @@
         },
         {
             "name": "AuthService",
-            "id": "injectable-AuthService-59550c1d4ac39007fdfa7f51d632e605",
+            "id": "injectable-AuthService-ceecce2abd0891f09eb74b6ea0677403",
             "file": "src/app/services/auth.service.ts",
             "properties": [
                 {
@@ -541,7 +541,7 @@
                 }
             ],
             "description": "",
-            "sourceCode": "import { HttpClient, HttpParams } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { environment } from 'src/environments/environment';\r\nimport { AuthResponseData } from '../models/AuthResponseData.model';\r\nimport { User } from '../models/user.model';\r\nimport { AppState } from '../store/app.state';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthService {\r\n  timeoutInterval: any;\r\n  constructor(private http: HttpClient, private store: Store<AppState>) {}\r\n\r\n  login(email: string, password: string): Observable<AuthResponseData> {\r\n    let httpParams = new HttpParams();\r\n    httpParams = httpParams.set(\"email\", email).set(\"password\",password);\r\n    return this.http.get<AuthResponseData>(environment.mockURL +'users', {params:httpParams})\r\n\r\n  }\r\n\r\n  signUp(email: string, password: string,fname:string,lname:string,id:string): Observable<AuthResponseData> {\r\n    const data={\r\n      id:id,\r\n      email:email,\r\n      firstname:fname,\r\n      lastname:lname,\r\n      password:password\r\n    }\r\n      return this.http.post<AuthResponseData>(environment.mockURL +'users/', data)\r\n\r\n  }\r\n\r\n  formatUser(data: AuthResponseData) {\r\n\r\n    const user = new User(\r\n      data.email,\r\n      data.id,\r\n      data.firstname,\r\n      data.lastname\r\n    );\r\n    return user;\r\n  }\r\n\r\n  getErrorMessage(message: string) {\r\n    switch (message) {\r\n      case 'EMAIL_NOT_FOUND':\r\n        return 'Email Not Found';\r\n      case 'INVALID_PASSWORD':\r\n        return 'Invalid Password';\r\n      case 'EMAIL_EXISTS':\r\n        return 'Email already exists';\r\n      default:\r\n        return 'Unknown error occurred. Please try again';\r\n    }\r\n  }\r\n\r\n  setUserInLocalStorage(user: User) {\r\n    localStorage.setItem('userData', JSON.stringify(user));\r\n\r\n  }\r\n\r\n  getUserFromLocalStorage() {\r\n    const userDataString = localStorage.getItem('userData');\r\n    if (userDataString) {\r\n      const userData = JSON.parse(userDataString);\r\n      const user = new User(\r\n        userData.email,\r\n        userData.token,\r\n        userData.firstname,\r\n        userData.lastname,\r\n      );\r\n      return user;\r\n    }\r\n    return null;\r\n  }\r\n\r\n  logout() {\r\n    localStorage.removeItem('userData');\r\n  }\r\n}\r\n",
+            "sourceCode": "import { HttpClient, HttpParams } from '@angular/common/http';\r\nimport { Injectable } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { environment } from 'src/environments/environment';\r\nimport { AuthResponseData } from '../models/AuthResponseData.model';\r\nimport { User } from '../models/user.model';\r\nimport { AppState } from '../store/app.state';\r\n\r\n@Injectable({\r\n  providedIn: 'root'\r\n})\r\nexport class AuthService {\r\n  timeoutInterval: any;\r\n  constructor(private http: HttpClient, private store: Store<AppState>) {}\r\n\r\n  login(email: string, password: string): Observable<AuthResponseData> {\r\n    let httpParams = new HttpParams();\r\n    httpParams = httpParams.set(\"email\", email).set(\"password\",password);\r\n    return this.http.get<AuthResponseData>(environment.mockURL +'users', {params:httpParams})\r\n\r\n  }\r\n\r\n  signUp(email: string, password: string,fname:string,lname:string,id:string): Observable<AuthResponseData> {\r\n    const data={\r\n      id:id,\r\n      email:email,\r\n      firstname:fname,\r\n      lastname:lname,\r\n      password:password\r\n    }\r\n      return this.http.post<AuthResponseData>(environment.mockURL +'users/', data)\r\n\r\n  }\r\n\r\n  formatUser(data: AuthResponseData) {\r\n\r\n    const user = new User(\r\n      data?.email,\r\n      data?.id,\r\n      data?.firstname,\r\n      data?.lastname\r\n    );\r\n    return user;\r\n  }\r\n\r\n  getErrorMessage(message: string) {\r\n    switch (message) {\r\n      case 'EMAIL_NOT_FOUND':\r\n        return 'Email Not Found';\r\n      case 'INVALID_PASSWORD':\r\n        return 'Invalid Password';\r\n      case 'EMAIL_EXISTS':\r\n        return 'Email already exists';\r\n      default:\r\n        return 'Unknown error occurred. Please try again';\r\n    }\r\n  }\r\n\r\n  setUserInLocalStorage(user: User) {\r\n    localStorage.setItem('userData', JSON.stringify(user));\r\n\r\n  }\r\n\r\n  getUserFromLocalStorage() {\r\n    const userDataString = localStorage.getItem('userData');\r\n    if (userDataString) {\r\n      const userData = JSON.parse(userDataString);\r\n      const user = new User(\r\n        userData?.email,\r\n        userData?.token,\r\n        userData?.firstname,\r\n        userData?.lastname,\r\n      );\r\n      return user;\r\n    }\r\n    return null;\r\n  }\r\n\r\n  logout() {\r\n    localStorage.removeItem('userData');\r\n  }\r\n}\r\n",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -688,7 +688,7 @@
         },
         {
             "name": "PostsEffects",
-            "id": "injectable-PostsEffects-e7df7b5a88fa9ca7fa413a7a58134866",
+            "id": "injectable-PostsEffects-f98826b90cc3726c6aad8d0ebd256e1c",
             "file": "src/app/post/state/posts.effects.ts",
             "properties": [
                 {
@@ -701,7 +701,7 @@
                 },
                 {
                     "name": "deletePost$",
-                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(deletePost),\r\n      switchMap((action) => {\r\n        return this.postsService.deletePost(action.id).pipe(\r\n          map((data) => {\r\n            return deletePostSuccess({ id: action.id });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
+                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(deletePost),\r\n      switchMap((action) => {\r\n        return this.postsService.deletePost(action?.id).pipe(\r\n          map((data) => {\r\n            return deletePostSuccess({ id: action?.id });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
                     "type": "",
                     "optional": false,
                     "description": "",
@@ -717,7 +717,7 @@
                 },
                 {
                     "name": "updatePost$",
-                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(updatePost),\r\n      switchMap((action) => {\r\n        return this.postsService.updatePost(action.post).pipe(\r\n          map((data) => {\r\n            const updatedPost: Update<Post> = {\r\n              id: action.post.id,\r\n              changes: {\r\n                ...action.post,\r\n              },\r\n            };\r\n            return updatePostSuccess({ post: updatedPost });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
+                    "defaultValue": "createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(updatePost),\r\n      switchMap((action) => {\r\n        return this.postsService.updatePost(action.post).pipe(\r\n          map((data) => {\r\n            const updatedPost: Update<Post> = {\r\n              id: action.post?.id,\r\n              changes: {\r\n                ...action.post,\r\n              },\r\n            };\r\n            return updatePostSuccess({ post: updatedPost });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  })",
                     "type": "",
                     "optional": false,
                     "description": "",
@@ -726,7 +726,7 @@
             ],
             "methods": [],
             "description": "",
-            "sourceCode": "import { AppState } from './../../store/app.state';\r\nimport { getPosts } from './posts.selector';\r\nimport { Store } from '@ngrx/store';\r\nimport { Update } from '@ngrx/entity';\r\nimport { Post } from './../../models/posts.model';\r\nimport { map, mergeMap, switchMap, withLatestFrom,} from 'rxjs/operators';\r\nimport { addPost,addPostSuccess,deletePost,deletePostSuccess,loadPosts,loadPostsSuccess,updatePost,updatePostSuccess} from './posts.actions';\r\nimport { PostsService } from './../../services/posts.service';\r\nimport { Actions, createEffect, ofType } from '@ngrx/effects';\r\nimport { Injectable } from '@angular/core';\r\nimport { of } from 'rxjs';\r\nimport { dummyAction } from 'src/app/auth/state/auth.actions';\r\n\r\n@Injectable()\r\nexport class PostsEffects {\r\n  constructor(\r\n    private actions$: Actions,\r\n    private postsService: PostsService,\r\n    private store: Store<AppState>\r\n  ) {}\r\n\r\n  loadPosts$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loadPosts),\r\n      withLatestFrom(this.store.select(getPosts)),\r\n      mergeMap(([action, posts]) => {\r\n        if (!posts.length || posts.length === 1) {\r\n          return this.postsService.getPosts().pipe(\r\n            map((posts) => {\r\n              return loadPostsSuccess({ posts });\r\n            })\r\n          );\r\n        }\r\n        return of(dummyAction());\r\n      })\r\n    );\r\n  });\r\n\r\n  addPost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(addPost),\r\n      mergeMap((action) => {\r\n        return this.postsService.addPost(action.post).pipe(\r\n          map((data) => {\r\n            const post = { ...action.post };\r\n            return addPostSuccess({ post });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  updatePost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(updatePost),\r\n      switchMap((action) => {\r\n        return this.postsService.updatePost(action.post).pipe(\r\n          map((data) => {\r\n            const updatedPost: Update<Post> = {\r\n              id: action.post.id,\r\n              changes: {\r\n                ...action.post,\r\n              },\r\n            };\r\n            return updatePostSuccess({ post: updatedPost });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n  deletePost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(deletePost),\r\n      switchMap((action) => {\r\n        return this.postsService.deletePost(action.id).pipe(\r\n          map((data) => {\r\n            return deletePostSuccess({ id: action.id });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n}\r\n",
+            "sourceCode": "import { AppState } from './../../store/app.state';\r\nimport { getPosts } from './posts.selector';\r\nimport { Store } from '@ngrx/store';\r\nimport { Update } from '@ngrx/entity';\r\nimport { Post } from './../../models/posts.model';\r\nimport { map, mergeMap, switchMap, withLatestFrom,} from 'rxjs/operators';\r\nimport { addPost,addPostSuccess,deletePost,deletePostSuccess,loadPosts,loadPostsSuccess,updatePost,updatePostSuccess} from './posts.actions';\r\nimport { PostsService } from './../../services/posts.service';\r\nimport { Actions, createEffect, ofType } from '@ngrx/effects';\r\nimport { Injectable } from '@angular/core';\r\nimport { of } from 'rxjs';\r\nimport { dummyAction } from 'src/app/auth/state/auth.actions';\r\n\r\n@Injectable()\r\nexport class PostsEffects {\r\n  constructor(\r\n    private actions$: Actions,\r\n    private postsService: PostsService,\r\n    private store: Store<AppState>\r\n  ) {}\r\n\r\n  loadPosts$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(loadPosts),\r\n      withLatestFrom(this.store.select(getPosts)),\r\n      mergeMap(([action, posts]) => {\r\n        if (!posts.length || posts.length === 1) {\r\n          return this.postsService.getPosts().pipe(\r\n            map((posts) => {\r\n              return loadPostsSuccess({ posts });\r\n            })\r\n          );\r\n        }\r\n        return of(dummyAction());\r\n      })\r\n    );\r\n  });\r\n\r\n  addPost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(addPost),\r\n      mergeMap((action) => {\r\n        return this.postsService.addPost(action.post).pipe(\r\n          map((data) => {\r\n            const post = { ...action.post };\r\n            return addPostSuccess({ post });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n\r\n  updatePost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(updatePost),\r\n      switchMap((action) => {\r\n        return this.postsService.updatePost(action.post).pipe(\r\n          map((data) => {\r\n            const updatedPost: Update<Post> = {\r\n              id: action.post?.id,\r\n              changes: {\r\n                ...action.post,\r\n              },\r\n            };\r\n            return updatePostSuccess({ post: updatedPost });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n  deletePost$ = createEffect(() => {\r\n    return this.actions$.pipe(\r\n      ofType(deletePost),\r\n      switchMap((action) => {\r\n        return this.postsService.deletePost(action?.id).pipe(\r\n          map((data) => {\r\n            return deletePostSuccess({ id: action?.id });\r\n          })\r\n        );\r\n      })\r\n    );\r\n  });\r\n}\r\n",
             "constructorObj": {
                 "name": "constructor",
                 "description": "",
@@ -1350,7 +1350,7 @@
         },
         {
             "name": "HeaderComponent",
-            "id": "component-HeaderComponent-7793e070a5bda352ee92c4adb2a32021-1",
+            "id": "component-HeaderComponent-9ea5ffcd34b95bd2a52d62a32f5d3cc1-1",
             "file": "src/app/shared/header/header.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1366,17 +1366,35 @@
                 "./header.component.html"
             ],
             "viewProviders": [],
-            "inputsClass": [],
-            "outputsClass": [],
-            "propertiesClass": [
+            "inputsClass": [
                 {
                     "name": "isAuthenticated",
-                    "type": "Observable<boolean>",
-                    "optional": false,
-                    "description": "",
-                    "line": 15
+                    "defaultValue": "null",
+                    "line": 26,
+                    "type": "Observable<boolean>"
                 }
             ],
+            "outputsClass": [
+                {
+                    "name": "onCreateAccount",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 23,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogin",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 17,
+                    "type": "EventEmitter"
+                },
+                {
+                    "name": "onLogoutBtn",
+                    "defaultValue": "new EventEmitter<Event>()",
+                    "line": 20,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
             "methodsClass": [
                 {
                     "name": "ngOnInit",
@@ -1384,7 +1402,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 18
+                    "line": 32
                 },
                 {
                     "name": "onLogout",
@@ -1397,7 +1415,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 30,
+                    "line": 45,
                     "jsdoctags": [
                         {
                             "name": "event",
@@ -1414,7 +1432,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 23
+                    "line": 38
                 }
             ],
             "hostBindings": [],
@@ -1422,7 +1440,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Observable } from 'rxjs';\r\nimport { Component, OnInit } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { ThemeService } from 'src/app/theme/theme.service';\r\nimport { isAuthenticated } from 'src/app/auth/state/auth.selector';\r\nimport { autoLogout } from 'src/app/auth/state/auth.actions';\r\nimport { AppState } from 'src/app/store/app.state';\r\n\r\n@Component({\r\n  selector: 'app-header',\r\n  templateUrl: './header.component.html',\r\n  styleUrls: ['./header.component.scss'],\r\n})\r\nexport class HeaderComponent implements OnInit {\r\n  isAuthenticated: Observable<boolean>;\r\n  constructor(private store: Store<AppState>,private themeService: ThemeService) {}\r\n\r\n  ngOnInit(): void {\r\n    this.themeService.setLightTheme();\r\n\r\n    this.isAuthenticated = this.store.select(isAuthenticated);\r\n  }\r\n  toggleTheme(){\r\n    if (this.themeService.isDarkTheme()) {\r\n      this.themeService.setLightTheme();\r\n    } else {\r\n      this.themeService.setDarkTheme();\r\n    }\r\n  }\r\n  onLogout(event: Event) {\r\n    // event.preventDefault();\r\n    this.store.dispatch(autoLogout());\r\n  }\r\n}\r\n",
+            "sourceCode": "import { Observable } from 'rxjs';\r\nimport { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';\r\nimport { Store } from '@ngrx/store';\r\nimport { ThemeService } from 'src/app/theme/theme.service';\r\nimport { isAuthenticated } from 'src/app/auth/state/auth.selector';\r\nimport { autoLogout } from 'src/app/auth/state/auth.actions';\r\nimport { AppState } from 'src/app/store/app.state';\r\n\r\n@Component({\r\n  selector: 'app-header',\r\n  templateUrl: './header.component.html',\r\n  styleUrls: ['./header.component.scss'],\r\n})\r\nexport class HeaderComponent implements OnInit {\r\n\r\n  @Output()\r\n  onLogin = new EventEmitter<Event>();\r\n\r\n  @Output()\r\n  onLogoutBtn = new EventEmitter<Event>();\r\n\r\n  @Output()\r\n  onCreateAccount = new EventEmitter<Event>();\r\n  \r\n  @Input()\r\n  isAuthenticated: Observable<boolean> = null;\r\n\r\n\r\n  // isAuthenticated: Observable<boolean>;\r\n  constructor(private store: Store<AppState>,private themeService: ThemeService) {}\r\n\r\n  ngOnInit(): void {\r\n    this.themeService.setLightTheme();\r\n\r\n    this.isAuthenticated = this.store.select(isAuthenticated);\r\n    console.log(this.isAuthenticated);\r\n  }\r\n  toggleTheme(){\r\n    if (this.themeService.isDarkTheme()) {\r\n      this.themeService.setLightTheme();\r\n    } else {\r\n      this.themeService.setDarkTheme();\r\n    }\r\n  }\r\n  onLogout(event: Event) {\r\n    // event.preventDefault();\r\n    this.store.dispatch(autoLogout());\r\n  }\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1444,7 +1462,7 @@
                         "type": "ThemeService"
                     }
                 ],
-                "line": 15,
+                "line": 26,
                 "jsdoctags": [
                     {
                         "name": "store",
@@ -1468,11 +1486,11 @@
             "isDuplicate": true,
             "duplicateId": 1,
             "duplicateName": "HeaderComponent-1",
-            "templateData": "<div class=\"toolbar\" role=\"banner\">\r\n    <a routerLink=\"/\"><img\r\n      width=\"40\"\r\n      alt=\"Angular Logo\"\r\n      src=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==\"\r\n    /></a>\r\n    <span>Welcome</span>\r\n      <div class=\"spacer\"></div>\r\n      <!-- <a aria-label=\"Angular on twitter\" target=\"_blank\" rel=\"noopener\" href=\"https://twitter.com/angular\" title=\"Twitter\">\r\n        <svg id=\"twitter-logo\" height=\"24\" data-name=\"Logo\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\">\r\n          <rect width=\"400\" height=\"400\" fill=\"none\"/>\r\n          <path d=\"M153.62,301.59c94.34,0,145.94-78.16,145.94-145.94,0-2.22,0-4.43-.15-6.63A104.36,104.36,0,0,0,325,122.47a102.38,102.38,0,0,1-29.46,8.07,51.47,51.47,0,0,0,22.55-28.37,102.79,102.79,0,0,1-32.57,12.45,51.34,51.34,0,0,0-87.41,46.78A145.62,145.62,0,0,1,92.4,107.81a51.33,51.33,0,0,0,15.88,68.47A50.91,50.91,0,0,1,85,169.86c0,.21,0,.43,0,.65a51.31,51.31,0,0,0,41.15,50.28,51.21,51.21,0,0,1-23.16.88,51.35,51.35,0,0,0,47.92,35.62,102.92,102.92,0,0,1-63.7,22A104.41,104.41,0,0,1,75,278.55a145.21,145.21,0,0,0,78.62,23\" fill=\"#fff\"/>\r\n        </svg>\r\n      </a> -->\r\n      <a class=\"link\" *ngIf=\"!(isAuthenticated | async)\" routerLink=\"auth/login\">Login</a>\r\n      <a class=\"link\" *ngIf=\"!(isAuthenticated | async)\" routerLink=\"auth/signup\" >Register</a>\r\n  \r\n      <button class=\"button\" (click)=\"toggleTheme()\">Change Theme</button>\r\n      <button class=\"button\"  *ngIf=\"(isAuthenticated | async)\" (click)=\"onLogout($event)\">Logout</button>\r\n  \r\n  </div>\r\n  <div >\r\n  </div>"
+            "templateData": "<div class=\"toolbar\" role=\"banner\">\r\n    <a routerLink=\"/\"><img\r\n      width=\"40\"\r\n      alt=\"Angular Logo\"\r\n      src=\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==\"\r\n    /></a>\r\n    <span>Welcome</span>\r\n      <div class=\"spacer\"></div>\r\n      <!-- <a aria-label=\"Angular on twitter\" target=\"_blank\" rel=\"noopener\" href=\"https://twitter.com/angular\" title=\"Twitter\">\r\n        <svg id=\"twitter-logo\" height=\"24\" data-name=\"Logo\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\">\r\n          <rect width=\"400\" height=\"400\" fill=\"none\"/>\r\n          <path d=\"M153.62,301.59c94.34,0,145.94-78.16,145.94-145.94,0-2.22,0-4.43-.15-6.63A104.36,104.36,0,0,0,325,122.47a102.38,102.38,0,0,1-29.46,8.07,51.47,51.47,0,0,0,22.55-28.37,102.79,102.79,0,0,1-32.57,12.45,51.34,51.34,0,0,0-87.41,46.78A145.62,145.62,0,0,1,92.4,107.81a51.33,51.33,0,0,0,15.88,68.47A50.91,50.91,0,0,1,85,169.86c0,.21,0,.43,0,.65a51.31,51.31,0,0,0,41.15,50.28,51.21,51.21,0,0,1-23.16.88,51.35,51.35,0,0,0,47.92,35.62,102.92,102.92,0,0,1-63.7,22A104.41,104.41,0,0,1,75,278.55a145.21,145.21,0,0,0,78.62,23\" fill=\"#fff\"/>\r\n        </svg>\r\n      </a> -->\r\n      <a class=\"link\" *ngIf=\"!(isAuthenticated | async)\" routerLink=\"auth/login\" (click)=\"onLogin.emit($event)\">Login</a>\r\n      <a class=\"link\" *ngIf=\"!(isAuthenticated | async)\" routerLink=\"auth/signup\" (click)=\"onCreateAccount.emit($event)\">Register</a>\r\n  \r\n      <button class=\"button\" (click)=\"toggleTheme()\">Change Theme</button>\r\n      <button class=\"button\"  *ngIf=\"(isAuthenticated | async)\" (click)=\"onLogout($event);onLogoutBtn.emit($event)\">Logout</button>\r\n  \r\n  </div>\r\n  <div >\r\n  </div>"
         },
         {
             "name": "LoginComponent",
-            "id": "component-LoginComponent-f3f0274eaa724f6c811490d0e0c3357f",
+            "id": "component-LoginComponent-bc6f3cdc15e6d1f1e7e7f64e7435145b",
             "file": "src/app/auth/login/login.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1488,22 +1506,22 @@
                 "./login.component.html"
             ],
             "viewProviders": [],
-            "inputsClass": [],
+            "inputsClass": [
+                {
+                    "name": "loginForm",
+                    "line": 19,
+                    "type": "FormGroup"
+                }
+            ],
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "errorMessage",
-                    "type": "Observable<string>",
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 17
-                },
-                {
-                    "name": "loginForm",
-                    "type": "FormGroup",
-                    "optional": false,
-                    "description": "",
-                    "line": 16
+                    "line": 20
                 }
             ],
             "methodsClass": [
@@ -1513,7 +1531,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 21
+                    "line": 25
                 },
                 {
                     "name": "onLoginSubmit",
@@ -1521,7 +1539,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 29
+                    "line": 33
                 }
             ],
             "hostBindings": [],
@@ -1529,7 +1547,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { getErrorMessage } from 'src/app/store/Shared/shared.selector';\r\nimport { loginStart } from '../state/auth.actions';\r\n\r\n@Component({\r\n  selector: 'app-login',\r\n  templateUrl: './login.component.html',\r\n  styleUrls: ['./login.component.scss']\r\n})\r\nexport class LoginComponent implements OnInit {\r\n\r\n  loginForm: FormGroup;\r\n  errorMessage: Observable<string>;\r\n\r\n  constructor(private store: Store<AppState>) {}\r\n\r\n  ngOnInit(): void {\r\n    this.loginForm = new FormGroup({\r\n      email: new FormControl('', [Validators.required, Validators.email]),\r\n      password: new FormControl('', [Validators.required]),\r\n    });\r\n    this.errorMessage = this.store.select(getErrorMessage);\r\n\r\n  }\r\n  onLoginSubmit() {\r\n    const email = this.loginForm.value.email;\r\n    const password = this.loginForm.value.password;\r\n    this.store.dispatch(loginStart({ email, password }));\r\n  }\r\n\r\n}\r\n",
+            "sourceCode": "import { EventEmitter, Input, Output } from '@angular/core';\r\nimport { Component, OnInit } from '@angular/core';\r\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { getErrorMessage } from 'src/app/store/Shared/shared.selector';\r\nimport { loginStart } from '../state/auth.actions';\r\n\r\n@Component({\r\n  selector: 'app-login',\r\n  templateUrl: './login.component.html',\r\n  styleUrls: ['./login.component.scss']\r\n})\r\nexport class LoginComponent implements OnInit {\r\n\r\n  // loginForm: FormGroup;\r\n  // errorMessage: Observable<string>;\r\n  @Input() loginForm:FormGroup;\r\n  submitted=false\r\n  // @Output() btnClicked = new EventEmitter<boolean>();\r\n\r\n  constructor(private store: Store<AppState>) {}\r\n\r\n  ngOnInit(): void {\r\n    this.loginForm = new FormGroup({\r\n      email: new FormControl('', [Validators.required, Validators.email]),\r\n      password: new FormControl('', [Validators.required]),\r\n    });\r\n    // this.errorMessage = this.store.select(getErrorMessage);\r\n\r\n  }\r\n  onLoginSubmit() {\r\n    this.submitted = true;\r\n    if (this.loginForm.invalid){\r\n      return;\r\n    }\r\n    const email = this.loginForm.value.email;\r\n    const password = this.loginForm.value.password;\r\n    this.store.dispatch(loginStart({ email, password }));\r\n    this.submitted=false;\r\n    this.loginForm.reset();\r\n  }\r\n\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1547,7 +1565,7 @@
                         "type": "Store<AppState>"
                     }
                 ],
-                "line": 17,
+                "line": 20,
                 "jsdoctags": [
                     {
                         "name": "store",
@@ -1561,7 +1579,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<div class=\"top-margin\">\r\n    <!-- <span class=\"err error-red\" *ngIf=\"errorMessage | async as error\">{{error}}</span> -->\r\n  </div>\r\n  <form class=\"form1\" [formGroup]=\"loginForm\" (ngSubmit)=\"onLoginSubmit()\">\r\n    \r\n    <label for=\"email\">Email</label>\r\n    <input id=\"email\" type=\"email\" formControlName=\"email\">\r\n    <div class=\"err emailerr\">\r\n      <div *ngIf=\"!loginForm.get('email').valid&&loginForm.get('email').touched\">\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('email').hasError('pattern')\">Entered data has error!</span>\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('email').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"password\">Password</label>\r\n    <input id=\"password\" type=\"password\" formControlName=\"password\">\r\n    <div class=\"err pwdError\">\r\n      <div *ngIf=\"!loginForm.get('password').valid&&loginForm.get('password').touched\">\r\n        <span *ngIf = \"loginForm.get('password').errors?.minlength\">Minlength 6 is invalid!</span>\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('password').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n    <button [disabled]=\"loginForm.invalid\">Login</button>\r\n  </form>"
+            "templateData": "<div class=\"top-margin\">\r\n    <!-- <span class=\"err error-red\" *ngIf=\"errorMessage | async as error\">{{error}}</span> -->\r\n  </div>\r\n  <form class=\"form1\" [formGroup]=\"loginForm\" (ngSubmit)=\"onLoginSubmit()\">\r\n    \r\n    <label for=\"email\">Email</label>\r\n    <input id=\"email\" type=\"email\" formControlName=\"email\">\r\n    <div class=\"err emailerr\">\r\n      <div *ngIf=\"submitted || (!loginForm.get('email').valid&&loginForm.get('email').touched)\">\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('email').hasError('pattern')\">Entered data has error!</span>\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('email').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"password\">Password</label>\r\n    <input id=\"password\" type=\"password\" formControlName=\"password\">\r\n    <div class=\"err pwdError\">\r\n      <div *ngIf=\"submitted || (!loginForm.get('password').valid&&loginForm.get('password').touched)\">\r\n        <span *ngIf = \"loginForm.get('password').errors?.minlength\">Minlength 6 is invalid!</span>\r\n        <span class=\"error-red\" *ngIf = \"loginForm.get('password').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n    <button [disabled]=\"loginForm.invalid\" >Login</button>\r\n  </form>"
         },
         {
             "name": "ModalComponent",
@@ -1752,7 +1770,7 @@
         },
         {
             "name": "PostListComponent",
-            "id": "component-PostListComponent-acb2f14dc1a389ae3d29ca5a4a574dad",
+            "id": "component-PostListComponent-9ea6a704a25e8399561ab3a9203d867c",
             "file": "src/app/post/post-list/post-list.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1768,7 +1786,28 @@
                 "./post-list.component.html"
             ],
             "viewProviders": [],
-            "inputsClass": [],
+            "inputsClass": [
+                {
+                    "name": "actions",
+                    "line": 28,
+                    "type": "boolean"
+                },
+                {
+                    "name": "isAddActivated",
+                    "line": 36,
+                    "type": "boolean"
+                },
+                {
+                    "name": "isUpdateActivated",
+                    "line": 34,
+                    "type": "boolean"
+                },
+                {
+                    "name": "posts",
+                    "line": 30,
+                    "type": "Post[]"
+                }
+            ],
             "outputsClass": [],
             "propertiesClass": [
                 {
@@ -1776,7 +1815,7 @@
                     "type": "Post",
                     "optional": false,
                     "description": "",
-                    "line": 26
+                    "line": 32
                 },
                 {
                     "name": "createForm",
@@ -1793,34 +1832,18 @@
                     "line": 22
                 },
                 {
-                    "name": "isAddActivated",
-                    "defaultValue": "false",
-                    "type": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 28
-                },
-                {
-                    "name": "isUpdateActivated",
-                    "defaultValue": "false",
-                    "type": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 27
-                },
-                {
-                    "name": "posts",
+                    "name": "posts$",
                     "type": "Observable<Post[]>",
                     "optional": false,
                     "description": "",
-                    "line": 25
+                    "line": 29
                 },
                 {
                     "name": "showActions",
                     "type": "Observable<boolean>",
                     "optional": false,
                     "description": "",
-                    "line": 23
+                    "line": 24
                 }
             ],
             "methodsClass": [
@@ -1835,7 +1858,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 73,
+                    "line": 89,
                     "jsdoctags": [
                         {
                             "name": "id",
@@ -1852,7 +1875,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 38
+                    "line": 46
                 },
                 {
                     "name": "onDeletePost",
@@ -1865,7 +1888,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 44,
+                    "line": 60,
                     "jsdoctags": [
                         {
                             "name": "id",
@@ -1882,7 +1905,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 57
+                    "line": 73
                 },
                 {
                     "name": "openModal",
@@ -1895,7 +1918,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 69,
+                    "line": 85,
                     "jsdoctags": [
                         {
                             "name": "id",
@@ -1912,7 +1935,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 54
+                    "line": 70
                 },
                 {
                     "name": "showUpdateForm",
@@ -1925,7 +1948,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 49,
+                    "line": 65,
                     "jsdoctags": [
                         {
                             "name": "post",
@@ -1942,7 +1965,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 77
+                    "line": 93
                 }
             ],
             "hostBindings": [],
@@ -1950,7 +1973,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { Post } from './../../models/posts.model';\r\nimport { Observable } from 'rxjs';\r\nimport { Store } from '@ngrx/store';\r\nimport { AppState } from './../../store/app.state';\r\nimport { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\nimport * as uuid from 'uuid';\r\nimport { ModalService } from 'src/app/_modal/modal.service';\r\nimport { addPost, deletePost, loadPosts, updatePost } from '../state/posts.actions';\r\nimport { getPosts } from '../state/posts.selector';\r\nimport { isAuthenticated } from 'src/app/auth/state/auth.selector';\r\n\r\n\r\n@Component({\r\n  selector: 'app-post-list',\r\n  templateUrl: './post-list.component.html',\r\n  styleUrls: ['./post-list.component.scss']\r\n})\r\nexport class PostListComponent implements OnInit {\r\n\r\n  createForm: FormGroup;\r\n  editForm: FormGroup;\r\n  showActions: Observable<boolean>;\r\n \r\n  posts: Observable<Post[]>;\r\n  courseToBeUpdated: Post;\r\n  isUpdateActivated = false;\r\n  isAddActivated = false;\r\n\r\n  constructor(private store: Store<AppState>,private formBuilder: FormBuilder,private modalService: ModalService) {\r\n    this.createForm = this.formBuilder.group({\r\n      title: ['',[Validators.required]],\r\n      description: ['',[Validators.required]],\r\n      category:['',[Validators.required]],\r\n    });\r\n  }\r\n\r\n  ngOnInit(): void {\r\n    this.posts = this.store.select(getPosts);\r\n    this.store.dispatch(loadPosts());\r\n    this.showActions = this.store.select(isAuthenticated);\r\n  }\r\n\r\n  onDeletePost(id: string) {\r\n    if (confirm('Are you sure you want to delete')) {\r\n      this.store.dispatch(deletePost({ id }));\r\n    }\r\n  }\r\n  showUpdateForm(post: Post) {\r\n    this.courseToBeUpdated = {...post};\r\n\r\n    this.isUpdateActivated = true;\r\n  }\r\n  showAddForm(){\r\n    this.isAddActivated=!this.isAddActivated;\r\n  }\r\n  onSubmit() {\r\n    this.isAddActivated=false;\r\n\r\n    const post: Post = {\r\n      id: uuid.v4(), \r\n      title: this.createForm.value.title,\r\n       description: this.createForm.value.description,\r\n       category:this.createForm.value.category};\r\n      this.store.dispatch(addPost({ post }));\r\n      this.createForm.reset();\r\n\r\n  }\r\n  openModal(id: string) {\r\n    this.modalService.open(id);\r\n    }\r\n\r\n    closeModal(id: string) {\r\n        this.modalService.close(id);\r\n    }\r\n\r\n    updateCourse() {\r\n\r\n    const title = this.courseToBeUpdated.title;\r\n    const description = this.courseToBeUpdated.description;\r\n    const category = this.courseToBeUpdated.category;\r\n    const id = this.courseToBeUpdated.id;\r\n    const post: Post = {\r\n      id: id,\r\n      title,\r\n      description,\r\n      category\r\n    };\r\n \r\n    this.store.dispatch(updatePost({ post }));\r\n\r\n      this.isUpdateActivated = false;\r\n      this.courseToBeUpdated = null;\r\n    }\r\n\r\n}\r\n",
+            "sourceCode": "import { Component, Input, OnInit } from '@angular/core';\r\nimport { Post } from './../../models/posts.model';\r\nimport { Observable } from 'rxjs';\r\nimport { Store } from '@ngrx/store';\r\nimport { AppState } from './../../store/app.state';\r\nimport { FormBuilder, FormGroup, Validators } from '@angular/forms';\r\nimport * as uuid from 'uuid';\r\nimport { ModalService } from 'src/app/_modal/modal.service';\r\nimport { addPost, deletePost, loadPosts, updatePost } from '../state/posts.actions';\r\nimport { getPosts } from '../state/posts.selector';\r\nimport { isAuthenticated } from 'src/app/auth/state/auth.selector';\r\nimport { select } from '@ngrx/store';\r\n\r\n@Component({\r\n  selector: 'app-post-list',\r\n  templateUrl: './post-list.component.html',\r\n  styleUrls: ['./post-list.component.scss']\r\n})\r\nexport class PostListComponent implements OnInit {\r\n  // @Input()\r\n  createForm: FormGroup;\r\n  editForm: FormGroup;\r\n\r\n   showActions: Observable<boolean>;\r\n  //  @Input() showActions:boolean;\r\n \r\n  // @Input() posts: Observable<Post[]>;\r\n  @Input() actions:boolean;\r\n   posts$: Observable<Post[]>;\r\n  @Input() posts:Post[];\r\n  \r\n  courseToBeUpdated: Post;\r\n\r\n  @Input() isUpdateActivated:boolean;\r\n\r\n  @Input() isAddActivated:boolean;\r\n\r\n  constructor(private store: Store<AppState>,private formBuilder: FormBuilder,private modalService: ModalService) {\r\n    this.createForm = this.formBuilder.group({\r\n      title: ['',[Validators.required]],\r\n      description: ['',[Validators.required]],\r\n      category:['',[Validators.required]],\r\n    });\r\n  }\r\n\r\n  ngOnInit(): void {\r\n    // this.posts = this.store.select(getPosts);\r\n    // console.log(this.posts);\r\n    this.store.select(getPosts).subscribe(data=>{\r\n      this.posts = data;\r\n    })\r\n    this.posts$ = this.store.pipe(select(getPosts));\r\n    this.store.dispatch(loadPosts());\r\n    this.store.select(isAuthenticated).subscribe(res =>{\r\n      this.actions = res;console.log(res);\r\n    })\r\n    this.showActions = this.store.select(isAuthenticated);\r\n  }\r\n\r\n  onDeletePost(id: string) {\r\n    if (confirm('Are you sure you want to delete')) {\r\n      this.store.dispatch(deletePost({ id }));\r\n    }\r\n  }\r\n  showUpdateForm(post: Post) {\r\n    this.courseToBeUpdated = {...post};\r\n\r\n    this.isUpdateActivated = true;\r\n  }\r\n  showAddForm(){\r\n    this.isAddActivated=!this.isAddActivated;\r\n  }\r\n  onSubmit() {\r\n    this.isAddActivated=false;\r\n\r\n    const post: Post = {\r\n      id: uuid.v4(), \r\n      title: this.createForm.value.title,\r\n       description: this.createForm.value.description,\r\n       category:this.createForm.value.category};\r\n      this.store.dispatch(addPost({ post }));\r\n      this.createForm.reset();\r\n\r\n  }\r\n  openModal(id: string) {\r\n    this.modalService.open(id);\r\n    }\r\n\r\n    closeModal(id: string) {\r\n        this.modalService.close(id);\r\n    }\r\n\r\n    updateCourse() {\r\n\r\n    const title = this.courseToBeUpdated.title;\r\n    const description = this.courseToBeUpdated.description;\r\n    const category = this.courseToBeUpdated.category;\r\n    const id = this.courseToBeUpdated.id;\r\n    const post: Post = {\r\n      id: id,\r\n      title,\r\n      description,\r\n      category\r\n    };\r\n \r\n    this.store.dispatch(updatePost({ post }));\r\n\r\n      this.isUpdateActivated = false;\r\n      this.courseToBeUpdated = null;\r\n    }\r\n\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1976,7 +1999,7 @@
                         "type": "ModalService"
                     }
                 ],
-                "line": 28,
+                "line": 36,
                 "jsdoctags": [
                     {
                         "name": "store",
@@ -2004,11 +2027,11 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<div>\r\n    <div class=\"top-margin\">\r\n      <button class=\"btn-display\" (click)=\"showAddForm()\" *ngIf=\"(showActions | async)\">Add New Item</button>\r\n      <div *ngIf=\"isAddActivated\">\r\n        <form class=\"form1\" [formGroup]=\"createForm\" (ngSubmit)=\"onSubmit()\">\r\n    \r\n          <label for=\"title\">Title</label>\r\n          <input id=\"title\" type=\"text\" formControlName=\"title\">\r\n          <div class=\"err emailerr\">\r\n            <div *ngIf=\"!createForm.get('title').valid&&createForm.get('title').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('title').hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n    \r\n          <label for=\"description\">Description</label>\r\n          <input id=\"description\" type=\"textarea\" formControlName=\"description\">\r\n          <div class=\"err pwdError\">\r\n            <div *ngIf=\"!createForm.get('description').valid&&createForm.get('description').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('description')?.hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n  \r\n          <label for=\"category\">Category</label>\r\n          <input id=\"category\" type=\"text\" formControlName=\"category\">\r\n          <div class=\"err catError\">\r\n            <div *ngIf=\"!createForm.get('category').valid&&createForm.get('category').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('category').hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n          <button [disabled]=\"createForm.invalid\" >Submit</button>\r\n        </form>\r\n      </div>\r\n  <div *ngIf=\"posts | async as postsData\">\r\n    <div *ngFor=\"let item of postsData\" >\r\n      <div class=\"top-spacing\">\r\n        <div class=\"wrapper\">\r\n            <div class=\"title\">\r\n              <div>{{item?.title}}</div>\r\n            <div class=\"position-right\" *ngIf=\"(showActions | async)\">\r\n                <ul>\r\n                    <li><i class=\"fal fa-pencil\" (click)=\"showUpdateForm(item);openModal(item?.id)\"></i></li>\r\n                    <li><i class=\"fal fa-trash\" (click)=\"onDeletePost(item?.id)\"></i></li>\r\n                </ul>\r\n            </div>\r\n        </div>\r\n            <div class=\"content\">{{item?.description}}</div>\r\n            <div class=\"category\">\r\n                <span>{{item?.category}}</span>\r\n            </div>\r\n          </div>\r\n  \r\n    </div>\r\n    <jw-modal id=\"{{item?.id}}\">\r\n      \r\n            <div *ngIf=\"isUpdateActivated\"> \r\n            <form (ngSubmit)=\"updateCourse(updateForm)\" #updateForm=\"ngForm\" class=\"form1\">\r\n                <label for=\"title\">Title</label>\r\n                <input type=\"text\" id=\"title\" name=\"title\" required [(ngModel)]=\"courseToBeUpdated.title\" class=\"input-margin\"/>\r\n                <label for=\"description\">Description</label>\r\n                <input type=\"text\" id=\"description\" name=\"description\" required [(ngModel)]=\"courseToBeUpdated.description\" class=\"input-margin\"/>\r\n  \r\n                <label for=\"category\">Category</label>\r\n                <input type=\"text\" id=\"category\" name=\"category\" required [(ngModel)]=\"courseToBeUpdated.category\" class=\"input-margin\"/>\r\n              <button [disabled]=\"updateForm.invalid\" class=\"btn btn-primary\" type=\"submit\">Update</button>\r\n            </form>\r\n           </div>\r\n  </jw-modal>\r\n    </div>\r\n  </div>\r\n    </div>\r\n  \r\n    \r\n  </div>\r\n  "
+            "templateData": "<div>\r\n    <div class=\"top-margin\">\r\n      <button class=\"btn-display\" (click)=\"showAddForm()\" *ngIf=\"actions\">Add New Item</button>\r\n      <div *ngIf=\"isAddActivated\">\r\n        <form class=\"form1\" [formGroup]=\"createForm\" (ngSubmit)=\"onSubmit()\">\r\n          <label for=\"title\">Title</label>\r\n          <input id=\"title\" type=\"text\" formControlName=\"title\">\r\n          <div class=\"err emailerr\">\r\n            <div *ngIf=\"!createForm.get('title').valid&&createForm.get('title').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('title').hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n    \r\n          <label for=\"description\">Description</label>\r\n          <input id=\"description\" type=\"textarea\" formControlName=\"description\">\r\n          <div class=\"err pwdError\">\r\n            <div *ngIf=\"!createForm.get('description').valid&&createForm.get('description').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('description')?.hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n  \r\n          <label for=\"category\">Category</label>\r\n          <input id=\"category\" type=\"text\" formControlName=\"category\">\r\n          <div class=\"err catError\">\r\n            <div *ngIf=\"!createForm.get('category').valid&&createForm.get('category').touched\">\r\n              <span class=\"error-red\" *ngIf = \"createForm.get('category').hasError('required')\">Field is required!</span>\r\n              </div> \r\n          </div>\r\n          <button [disabled]=\"createForm.invalid\" >Submit</button>\r\n        </form>\r\n      </div>\r\n      <!-- {{actions}} -->\r\n\r\n  <!-- <div *ngIf=\"posts | async as postsData\"> -->\r\n    <div *ngFor=\"let item of posts\" >\r\n      <div class=\"top-spacing\">\r\n        <div class=\"wrapper\">\r\n            <div class=\"title\">\r\n              <div>{{item?.title}}</div>\r\n            <div class=\"position-right\" *ngIf=\"actions\">\r\n                <ul>\r\n                    <li>\r\n                      <span (click)=\"showUpdateForm(item);openModal(item?.id)\">Edit</span>\r\n                      <!-- <i class=\"fal fa-pencil\" (click)=\"showUpdateForm(item);openModal(item?.id)\"></i> -->\r\n                    </li>\r\n                    <li>\r\n                      <span (click)=\"onDeletePost(item?.id)\">Del</span>\r\n                      <!-- <i class=\"fal fa-trash\" (click)=\"onDeletePost(item?.id)\"></i> -->\r\n                    </li>\r\n                </ul>\r\n            </div>\r\n        </div>\r\n            <div class=\"content\">{{item?.description}}</div>\r\n            <div class=\"category\">\r\n                <span>{{item?.category}}</span>\r\n            </div>\r\n          </div>\r\n  \r\n    </div>\r\n    <jw-modal id=\"{{item?.id}}\">\r\n      \r\n            <div *ngIf=\"isUpdateActivated\"> \r\n            <form (ngSubmit)=\"updateCourse(updateForm)\" #updateForm=\"ngForm\" class=\"form1\">\r\n                <label for=\"title\">Title</label>\r\n                <input type=\"text\" id=\"title\" name=\"title\" required [(ngModel)]=\"courseToBeUpdated.title\" class=\"input-margin\"/>\r\n                <label for=\"description\">Description</label>\r\n                <input type=\"text\" id=\"description\" name=\"description\" required [(ngModel)]=\"courseToBeUpdated.description\" class=\"input-margin\"/>\r\n  \r\n                <label for=\"category\">Category</label>\r\n                <input type=\"text\" id=\"category\" name=\"category\" required [(ngModel)]=\"courseToBeUpdated.category\" class=\"input-margin\"/>\r\n              <button [disabled]=\"updateForm.invalid\" class=\"btn btn-primary\" type=\"submit\">Update</button>\r\n            </form>\r\n           </div>\r\n  </jw-modal>\r\n    </div>\r\n  <!-- </div> -->\r\n    </div>\r\n  \r\n    \r\n  </div>\r\n  "
         },
         {
             "name": "SignupComponent",
-            "id": "component-SignupComponent-dbc140e94c0b12e3308530f9df9531d5",
+            "id": "component-SignupComponent-e2205426ecf32317ff7820a415a47115",
             "file": "src/app/auth/signup/signup.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -2028,18 +2051,19 @@
             "outputsClass": [],
             "propertiesClass": [
                 {
-                    "name": "errorMessage",
-                    "type": "Observable<string>",
-                    "optional": false,
-                    "description": "",
-                    "line": 17
-                },
-                {
                     "name": "registerForm",
                     "type": "FormGroup",
                     "optional": false,
                     "description": "",
                     "line": 16
+                },
+                {
+                    "name": "submitted",
+                    "defaultValue": "false",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 18
                 }
             ],
             "methodsClass": [
@@ -2049,7 +2073,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 21
+                    "line": 22
                 },
                 {
                     "name": "onSignUpSubmit",
@@ -2057,7 +2081,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 37
+                    "line": 38
                 }
             ],
             "hostBindings": [],
@@ -2065,7 +2089,7 @@
             "description": "",
             "rawdescription": "",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { getErrorMessage } from 'src/app/store/Shared/shared.selector';\r\nimport { signupStart } from '../state/auth.actions';\r\nimport * as uuid from 'uuid';\r\n\r\n@Component({\r\n  selector: 'app-signup',\r\n  templateUrl: './signup.component.html',\r\n  styleUrls: ['./signup.component.scss']\r\n})\r\nexport class SignupComponent implements OnInit {\r\n  registerForm: FormGroup;\r\n  errorMessage: Observable<string>;\r\n\r\n  constructor(private store: Store<AppState>) {}\r\n\r\n  ngOnInit(): void {\r\n    this.registerForm = new FormGroup({\r\n      firstName: new FormControl('', [Validators.required,Validators.minLength(4)]),\r\n      lastName: new FormControl('', [Validators.required,Validators.minLength(4)]),\r\n      email: new FormControl('', [Validators.required, Validators.email]),\r\n      password: new FormControl('', [Validators.required]),\r\n      // confirmPassword: new FormControl('', [Validators.required]),\r\n    },\r\n  //    {\r\n  //     validator: PasswordMustMatch('password', 'confirmPassword')\r\n  // }\r\n  );\r\n    this.errorMessage = this.store.select(getErrorMessage);\r\n\r\n  }\r\n\r\n  onSignUpSubmit() {\r\n\r\n    const email = this.registerForm.value.email;\r\n    const password = this.registerForm.value.password;\r\n    const firstname = this.registerForm.value.firstName;\r\n    const lastname = this.registerForm.value.lastName;\r\n    const uniqueid = uuid.v4();\r\n\r\n    this.store.dispatch(signupStart({ email, password,firstname,lastname,uniqueid }));\r\n  }\r\n\r\n}\r\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\r\nimport { FormControl, FormGroup, Validators } from '@angular/forms';\r\nimport { Store } from '@ngrx/store';\r\nimport { Observable } from 'rxjs';\r\nimport { AppState } from 'src/app/store/app.state';\r\nimport { getErrorMessage } from 'src/app/store/Shared/shared.selector';\r\nimport { signupStart } from '../state/auth.actions';\r\nimport * as uuid from 'uuid';\r\n\r\n@Component({\r\n  selector: 'app-signup',\r\n  templateUrl: './signup.component.html',\r\n  styleUrls: ['./signup.component.scss']\r\n})\r\nexport class SignupComponent implements OnInit {\r\n  registerForm: FormGroup;\r\n  // errorMessage: Observable<string>;\r\n  submitted = false;\r\n\r\n  constructor(private store: Store<AppState>) {}\r\n\r\n  ngOnInit(): void {\r\n    this.registerForm = new FormGroup({\r\n      firstName: new FormControl('', [Validators.required,Validators.minLength(4)]),\r\n      lastName: new FormControl('', [Validators.required,Validators.minLength(4)]),\r\n      email: new FormControl('', [Validators.required, Validators.email]),\r\n      password: new FormControl('', [Validators.required]),\r\n      // confirmPassword: new FormControl('', [Validators.required]),\r\n    },\r\n  //    {\r\n  //     validator: PasswordMustMatch('password', 'confirmPassword')\r\n  // }\r\n  );\r\n    // this.errorMessage = this.store.select(getErrorMessage);\r\n\r\n  }\r\n\r\n  onSignUpSubmit() {\r\n    this.submitted = true;\r\n    if (this.registerForm.invalid){\r\n      return;\r\n    }\r\n    const email = this.registerForm.value.email;\r\n    const password = this.registerForm.value.password;\r\n    const firstname = this.registerForm.value.firstName;\r\n    const lastname = this.registerForm.value.lastName;\r\n    const uniqueid = uuid.v4();\r\n\r\n    this.store.dispatch(signupStart({ email, password,firstname,lastname,uniqueid }));\r\n    this.submitted = false;\r\n    this.registerForm.reset();\r\n  }\r\n\r\n}\r\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -2083,7 +2107,7 @@
                         "type": "Store<AppState>"
                     }
                 ],
-                "line": 17,
+                "line": 18,
                 "jsdoctags": [
                     {
                         "name": "store",
@@ -2097,7 +2121,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "\r\n<div class=\" top-margin\">\r\n    <span class=\"err error-red\" *ngIf=\"errorMessage | async as error\">{{error}}</span>\r\n  </div>\r\n  \r\n  <form class=\"form1\" [formGroup]=\"registerForm\" (ngSubmit)=\"onSignUpSubmit()\">\r\n    \r\n    <label for=\"email\">First Name</label>\r\n    <input id=\"fname\" type=\"test\" formControlName=\"firstName\">\r\n    <div class=\"err fnameerr\">\r\n      <div *ngIf=\"!registerForm.get('firstName').valid&&registerForm.get('firstName').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('firstName').hasError('required')\">Field is required!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('firstName').errors?.minlength\">Minlength 4 is require!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"lname\">Last Name</label>\r\n    <input id=\"lname\" type=\"text\" formControlName=\"lastName\">\r\n    <div class=\"err lnameerr\">\r\n      <div *ngIf=\"!registerForm.get('lastName').valid&&registerForm.get('lastName').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('lastName').hasError('required')\">Field is required!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('lastName').errors?.minlength\">Minlength 4 is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"email\">Email</label>\r\n    <input id=\"email\" type=\"email\" formControlName=\"email\">\r\n    <div class=\"err emailerr\">\r\n      <div *ngIf=\"!registerForm.get('email').valid&&registerForm.get('email').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('email').hasError('email')\">Entered data has error!</span>\r\n        \r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('email').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"password\">Password</label>\r\n    <input id=\"password\" type=\"password\" formControlName=\"password\">\r\n    <div class=\"err pwdError\">\r\n      <div *ngIf=\"!registerForm.get('password').valid&&registerForm.get('password').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('password').hasError('required')\">Field is required!</span>\r\n        <span *ngIf = \"registerForm.get('password').errors?.minlength\">Minlength 6 is invalid!</span>\r\n      </div> \r\n    </div>\r\n  \r\n    <!-- <label for=\"confirmpassword\">Confirm Password</label>\r\n    <input id=\"confirmPassword\" type=\"password\" formControlName=\"confirmPassword\">\r\n    <div class=\"err cpwdError\">\r\n      <div *ngIf=\"!registerForm.get('confirmPassword').valid&&registerForm.get('confirmPassword').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('confirmPassword').hasError('required')\">Field is required!</span>\r\n        <span *ngIf = \"registerForm.get('confirmPassword').errors?.minlength\">Minlength 6 is invalid!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('confirmPassword').hasError('mustMatch')\">Fields should match!</span>\r\n      </div> \r\n    </div> -->\r\n    <button [disabled]=\"registerForm.invalid\">Register</button>\r\n  </form>"
+            "templateData": "\r\n<div class=\" top-margin\">\r\n    <!-- <span class=\"err error-red\" *ngIf=\"errorMessage | async as error\">{{error}}</span> -->\r\n  </div>\r\n  \r\n  <form class=\"form1\" [formGroup]=\"registerForm\" (ngSubmit)=\"onSignUpSubmit()\">\r\n    \r\n    <label for=\"email\">First Name</label>\r\n    <input id=\"fname\" type=\"test\" formControlName=\"firstName\">\r\n    <div class=\"err fnameerr\">\r\n      <div *ngIf=\"submitted || (!registerForm.get('firstName').valid&&registerForm.get('firstName').touched)\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('firstName').hasError('required')\">Field is required!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('firstName').errors?.minlength\">Minlength 4 is require!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"lname\">Last Name</label>\r\n    <input id=\"lname\" type=\"text\" formControlName=\"lastName\">\r\n    <div class=\"err lnameerr\">\r\n      <div *ngIf=\"submitted || (!registerForm.get('lastName').valid&&registerForm.get('lastName').touched)\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('lastName').hasError('required')\">Field is required!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('lastName').errors?.minlength\">Minlength 4 is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"email\">Email</label>\r\n    <input id=\"email\" type=\"email\" formControlName=\"email\">\r\n    <div class=\"err emailerr\">\r\n      <div *ngIf=\"submitted || (!registerForm.get('email').valid&&registerForm.get('email').touched)\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('email').hasError('email')\">Entered data has error!</span>\r\n        \r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('email').hasError('required')\">Field is required!</span>\r\n        </div> \r\n    </div>\r\n  \r\n    <label for=\"password\">Password</label>\r\n    <input id=\"password\" type=\"password\" formControlName=\"password\">\r\n    <div class=\"err pwdError\">\r\n      <div *ngIf=\"submitted ||( !registerForm.get('password').valid&&registerForm.get('password').touched)\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('password').hasError('required')\">Field is required!</span>\r\n        <span *ngIf = \"registerForm.get('password').errors?.minlength\">Minlength 6 is invalid!</span>\r\n      </div> \r\n    </div>\r\n  \r\n    <!-- <label for=\"confirmpassword\">Confirm Password</label>\r\n    <input id=\"confirmPassword\" type=\"password\" formControlName=\"confirmPassword\">\r\n    <div class=\"err cpwdError\">\r\n      <div *ngIf=\"!registerForm.get('confirmPassword').valid&&registerForm.get('confirmPassword').touched\">\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('confirmPassword').hasError('required')\">Field is required!</span>\r\n        <span *ngIf = \"registerForm.get('confirmPassword').errors?.minlength\">Minlength 6 is invalid!</span>\r\n        <span class=\"error-red\" *ngIf = \"registerForm.get('confirmPassword').hasError('mustMatch')\">Fields should match!</span>\r\n      </div> \r\n    </div> -->\r\n    <button [disabled]=\"registerForm.invalid\">Register</button>\r\n  </form>"
         }
     ],
     "modules": [
@@ -2486,6 +2510,14 @@
                 "defaultValue": "{\r\n  production: false,\r\n  mockURL:'http://localhost:3000/',\r\n}"
             },
             {
+                "name": "FormEmpty",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/login/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
                 "name": "getAuthState",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -2555,7 +2587,15 @@
                 "subtype": "variable",
                 "file": "src/app/auth/state/auth.selector.ts",
                 "type": "",
-                "defaultValue": "createSelector(getAuthState, (state) => {\r\n  return state.user ? state.user.userToken : null;\r\n})"
+                "defaultValue": "createSelector(getAuthState, (state) => {\r\n  return state?.user ? state.user.userToken : null;\r\n})"
+            },
+            {
+                "name": "header",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/header/header.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
             },
             {
                 "name": "initialState",
@@ -2587,7 +2627,7 @@
                 "subtype": "variable",
                 "file": "src/app/auth/state/auth.selector.ts",
                 "type": "",
-                "defaultValue": "createSelector(getAuthState, (state) => {\r\n  // console.log(state.user);\r\n  return state.user ? true : false;\r\n})"
+                "defaultValue": "createSelector(getAuthState, (state) => {\r\n  console.log(state?.user);\r\n  return state?.user ? true : false;\r\n})"
             },
             {
                 "name": "Large",
@@ -2694,6 +2734,14 @@
                 "defaultValue": "'[auth page] login Success'"
             },
             {
+                "name": "loginFormValidations",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/login/login.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
                 "name": "loginStart",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -2726,12 +2774,36 @@
                 "defaultValue": "() => {\r\n  let storage: { [key: string]: string } = {};\r\n  return {\r\n    getItem: (key: string) => (key in storage ? storage[key] : null),\r\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\r\n    removeItem: (key: string) => delete storage[key],\r\n    clear: () => (storage = {}),\r\n  };\r\n}"
             },
             {
+                "name": "mockdata",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/post/post-list/post-list.stories.ts",
+                "type": "Post[]",
+                "defaultValue": "[\r\n  {\r\n    id: \"3\",\r\n    title: \"Speaking JavaScript\",\r\n    description: \"Like it or not, JavaScript is everywhere these days-from browser to server to mobile-and now you, too, need to learn the language or dive deeper than you have. This concise book guides you into and through JavaScript, written by a veteran programmer who once found himself in the same position.\",\r\n    category: \"Coding\"\r\n  },\r\n  {\r\n    id: \"4\",\r\n    title: \"Speaking JavaScript2\",\r\n    description: \"Like it or not, JavaScript is everywhere these days-from browser to server to mobile-and now you, too, need to learn the language or dive deeper than you have. This concise book guides you into and through JavaScript, written by a veteran programmer who once found himself in the same position.\",\r\n    category: \"Coding\"\r\n  }]"
+            },
+            {
                 "name": "POST_STATE_NAME",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
                 "file": "src/app/post/state/posts.selector.ts",
                 "type": "string",
                 "defaultValue": "'posts'"
+            },
+            {
+                "name": "postList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/post/post-list/post-list.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "postListActions",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/post/post-list/post-list.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
             },
             {
                 "name": "postsAdapter",
@@ -2806,6 +2878,22 @@
                 "defaultValue": "'[auth page] signup success'"
             },
             {
+                "name": "signupForm",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/signup/signup.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "signupFormValidations",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/signup/signup.stories.ts",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
                 "name": "signupStart",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
@@ -2852,6 +2940,38 @@
                 "file": "src/stories/Page.stories.ts",
                 "type": "Story<Page>",
                 "defaultValue": "(args: Page) => ({\n  component: Page,\n  props: args,\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/post/post-list/post-list.stories.ts",
+                "type": "Story<PostListComponent>",
+                "defaultValue": "(args: PostListComponent) => ({\r\n  // moduleMetadata:{\r\n  //   providers:[\r\n  //    { provide:APP_INITIALIZER,\r\n\r\n  //   }\r\n  //   ]\r\n  // },\r\n  component: PostListComponent,\r\n  props: args,\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/signup/signup.stories.ts",
+                "type": "Story<SignupComponent>",
+                "defaultValue": "(args: SignupComponent) => ({\r\n  component: SignupComponent,\r\n  props: args,\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/auth/login/login.stories.ts",
+                "type": "Story<LoginComponent>",
+                "defaultValue": "(args: LoginComponent) => ({\r\n  component: LoginComponent,\r\n  props: args,\r\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/shared/header/header.stories.ts",
+                "type": "Story<HeaderComponent>",
+                "defaultValue": "(args: HeaderComponent) => ({\r\n  component: HeaderComponent,\r\n  props: args,\r\n})"
             },
             {
                 "name": "UPDATE_POST_ACTION",
@@ -3231,7 +3351,7 @@
                     "subtype": "variable",
                     "file": "src/app/auth/state/auth.selector.ts",
                     "type": "",
-                    "defaultValue": "createSelector(getAuthState, (state) => {\r\n  return state.user ? state.user.userToken : null;\r\n})"
+                    "defaultValue": "createSelector(getAuthState, (state) => {\r\n  return state?.user ? state.user.userToken : null;\r\n})"
                 },
                 {
                     "name": "isAuthenticated",
@@ -3239,7 +3359,7 @@
                     "subtype": "variable",
                     "file": "src/app/auth/state/auth.selector.ts",
                     "type": "",
-                    "defaultValue": "createSelector(getAuthState, (state) => {\r\n  // console.log(state.user);\r\n  return state.user ? true : false;\r\n})"
+                    "defaultValue": "createSelector(getAuthState, (state) => {\r\n  console.log(state?.user);\r\n  return state?.user ? true : false;\r\n})"
                 }
             ],
             "src/app/auth/state/auth.actions.ts": [
@@ -3404,6 +3524,32 @@
                     "defaultValue": "{\r\n  production: false,\r\n  mockURL:'http://localhost:3000/',\r\n}"
                 }
             ],
+            "src/app/auth/login/login.stories.ts": [
+                {
+                    "name": "FormEmpty",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/login/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "loginFormValidations",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/login/login.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/login/login.stories.ts",
+                    "type": "Story<LoginComponent>",
+                    "defaultValue": "(args: LoginComponent) => ({\r\n  component: LoginComponent,\r\n  props: args,\r\n})"
+                }
+            ],
             "src/app/store/router/router.selector.ts": [
                 {
                     "name": "getCurrentRoute",
@@ -3488,6 +3634,24 @@
                     "file": "src/app/post/state/posts.selector.ts",
                     "type": "",
                     "defaultValue": "postsAdapter.getSelectors()"
+                }
+            ],
+            "src/app/shared/header/header.stories.ts": [
+                {
+                    "name": "header",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/header/header.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/shared/header/header.stories.ts",
+                    "type": "Story<HeaderComponent>",
+                    "defaultValue": "(args: HeaderComponent) => ({\r\n  component: HeaderComponent,\r\n  props: args,\r\n})"
                 }
             ],
             "src/app/post/state/posts.state.ts": [
@@ -3632,6 +3796,40 @@
                     "defaultValue": "() => {\r\n  let storage: { [key: string]: string } = {};\r\n  return {\r\n    getItem: (key: string) => (key in storage ? storage[key] : null),\r\n    setItem: (key: string, value: string) => (storage[key] = value || ''),\r\n    removeItem: (key: string) => delete storage[key],\r\n    clear: () => (storage = {}),\r\n  };\r\n}"
                 }
             ],
+            "src/app/post/post-list/post-list.stories.ts": [
+                {
+                    "name": "mockdata",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/post/post-list/post-list.stories.ts",
+                    "type": "Post[]",
+                    "defaultValue": "[\r\n  {\r\n    id: \"3\",\r\n    title: \"Speaking JavaScript\",\r\n    description: \"Like it or not, JavaScript is everywhere these days-from browser to server to mobile-and now you, too, need to learn the language or dive deeper than you have. This concise book guides you into and through JavaScript, written by a veteran programmer who once found himself in the same position.\",\r\n    category: \"Coding\"\r\n  },\r\n  {\r\n    id: \"4\",\r\n    title: \"Speaking JavaScript2\",\r\n    description: \"Like it or not, JavaScript is everywhere these days-from browser to server to mobile-and now you, too, need to learn the language or dive deeper than you have. This concise book guides you into and through JavaScript, written by a veteran programmer who once found himself in the same position.\",\r\n    category: \"Coding\"\r\n  }]"
+                },
+                {
+                    "name": "postList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/post/post-list/post-list.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "postListActions",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/post/post-list/post-list.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/post/post-list/post-list.stories.ts",
+                    "type": "Story<PostListComponent>",
+                    "defaultValue": "(args: PostListComponent) => ({\r\n  // moduleMetadata:{\r\n  //   providers:[\r\n  //    { provide:APP_INITIALIZER,\r\n\r\n  //   }\r\n  //   ]\r\n  // },\r\n  component: PostListComponent,\r\n  props: args,\r\n})"
+                }
+            ],
             "src/app/store/Shared/shared.actions.ts": [
                 {
                     "name": "SET_ERROR_MESSAGE",
@@ -3648,6 +3846,32 @@
                     "file": "src/app/store/Shared/shared.actions.ts",
                     "type": "",
                     "defaultValue": "createAction(\r\n  SET_ERROR_MESSAGE,\r\n  props<{ message: string }>()\r\n)"
+                }
+            ],
+            "src/app/auth/signup/signup.stories.ts": [
+                {
+                    "name": "signupForm",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/signup/signup.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "signupFormValidations",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/signup/signup.stories.ts",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/auth/signup/signup.stories.ts",
+                    "type": "Story<SignupComponent>",
+                    "defaultValue": "(args: SignupComponent) => ({\r\n  component: SignupComponent,\r\n  props: args,\r\n})"
                 }
             ]
         },
@@ -3895,12 +4119,72 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/auth/login/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "FormEmpty",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/login/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "loginFormValidations",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/login/login.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/auth/signup/signup.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "SignupComponent",
                 "coveragePercent": 0,
                 "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/signup/signup.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "signupForm",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/signup/signup.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "signupFormValidations",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/signup/signup.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -4163,7 +4447,47 @@
                 "linktype": "component",
                 "name": "PostListComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/17",
+                "coverageCount": "0/19",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/post/post-list/post-list.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "mockdata",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/post/post-list/post-list.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "postList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/post/post-list/post-list.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "postListActions",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/post/post-list/post-list.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {
@@ -4457,7 +4781,27 @@
                 "linktype": "component",
                 "name": "HeaderComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/6",
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/header/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "header",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/shared/header/header.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
                 "status": "low"
             },
             {

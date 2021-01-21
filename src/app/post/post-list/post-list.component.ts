@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from './../../models/posts.model';
-import { Observable } from 'rxjs';
+import { Observable, Unsubscribable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from './../../store/app.state';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,7 +9,7 @@ import { ModalService } from 'src/app/_modal/modal.service';
 import { addPost, deletePost, loadPosts, updatePost } from '../state/posts.actions';
 import { getPosts } from '../state/posts.selector';
 import { isAuthenticated } from 'src/app/auth/state/auth.selector';
-
+import { select } from '@ngrx/store';
 
 @Component({
   selector: 'app-post-list',
@@ -17,15 +17,24 @@ import { isAuthenticated } from 'src/app/auth/state/auth.selector';
   styleUrls: ['./post-list.component.scss']
 })
 export class PostListComponent implements OnInit {
-
+  // @Input()
   createForm: FormGroup;
   editForm: FormGroup;
-  showActions: Observable<boolean>;
+
+   showActions: Observable<boolean>;
+  //  @Input() showActions:boolean;
  
-  posts: Observable<Post[]>;
+  // @Input() posts: Observable<Post[]>;
+  @Input() actions:boolean;
+   posts$: Observable<Post[]>;
+  @Input() posts:Post[];
+  
   courseToBeUpdated: Post;
-  isUpdateActivated = false;
-  isAddActivated = false;
+
+  @Input() isUpdateActivated:boolean;
+
+  @Input() isAddActivated:boolean;
+  subscription: Unsubscribable;
 
   constructor(private store: Store<AppState>,private formBuilder: FormBuilder,private modalService: ModalService) {
     this.createForm = this.formBuilder.group({
@@ -36,8 +45,16 @@ export class PostListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.posts = this.store.select(getPosts);
+    // this.posts = this.store.select(getPosts);
+    // console.log(this.posts);
+    this.subscription = this.store.select(getPosts).subscribe(data=>{
+      this.posts = data;
+    })
+    this.posts$ = this.store.pipe(select(getPosts));
     this.store.dispatch(loadPosts());
+    this.store.select(isAuthenticated).subscribe(res =>{
+      this.actions = res;console.log(res);
+    })
     this.showActions = this.store.select(isAuthenticated);
   }
 
@@ -92,5 +109,9 @@ export class PostListComponent implements OnInit {
       this.isUpdateActivated = false;
       this.courseToBeUpdated = null;
     }
-
+    ngOnDestroy() {
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+      }
+    }
 }

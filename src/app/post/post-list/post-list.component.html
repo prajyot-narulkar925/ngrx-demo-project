@@ -1,9 +1,8 @@
 <div>
     <div class="top-margin">
-      <button class="btn-display" (click)="showAddForm()" *ngIf="(showActions | async)">Add New Item</button>
+      <button class="btn-display" (click)="showAddForm()" *ngIf="actions">Add New Item</button>
       <div *ngIf="isAddActivated">
         <form class="form1" [formGroup]="createForm" (ngSubmit)="onSubmit()">
-    
           <label for="title">Title</label>
           <input id="title" type="text" formControlName="title">
           <div class="err emailerr">
@@ -30,21 +29,31 @@
           <button [disabled]="createForm.invalid" >Submit</button>
         </form>
       </div>
-  <div *ngIf="posts | async as postsData">
-    <div *ngFor="let item of postsData" >
+      <!-- {{actions}} -->
+
+  <!-- <div *ngIf="posts | async as postsData"> -->
+    <div *ngFor="let item of posts ; trackBy: item?.id" >
       <div class="top-spacing">
         <div class="wrapper">
-            <div class="title">
+            <div class="wrapper__title">
               <div>{{item?.title}}</div>
-            <div class="position-right" *ngIf="(showActions | async)">
+            <div class="wrapper__position-right" *ngIf="actions">
                 <ul>
-                    <li><i class="fal fa-pencil" (click)="showUpdateForm(item);openModal(item?.id)"></i></li>
-                    <li><i class="fal fa-trash" (click)="onDeletePost(item?.id)"></i></li>
+                    <li>
+                      <!-- <span (click)="showUpdateForm(item);openModal(item?.id)">Edit</span> -->
+                      <img src="./../../../assets/pencil-alt-solid.svg" (click)="showUpdateForm(item);openModal(item?.id)">
+                      <!-- <i class="fal fa-pencil" (click)="showUpdateForm(item);openModal(item?.id)"></i> -->
+                    </li>
+                    <li>
+                      <!-- <span (click)="onDeletePost(item?.id)">Del</span> -->
+                      <img src ="./../../../assets//trash-solid.svg" (click)="onDeletePost(item?.id)">
+                      <!-- <i class="fal fa-trash" (click)="onDeletePost(item?.id)"></i> -->
+                    </li>
                 </ul>
             </div>
         </div>
-            <div class="content">{{item?.description}}</div>
-            <div class="category">
+            <div class="wrapper__content">{{item?.description}}</div>
+            <div class="wrapper__category">
                 <span>{{item?.category}}</span>
             </div>
           </div>
@@ -66,7 +75,7 @@
            </div>
   </jw-modal>
     </div>
-  </div>
+  <!-- </div> -->
     </div>
   
     
