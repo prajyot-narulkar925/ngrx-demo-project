@@ -30,6 +30,10 @@ export class LoginComponent implements OnInit {
     // this.errorMessage = this.store.select(getErrorMessage);
 
   }
+
+  get email(){ return this.loginForm.get('email');}
+  get password(){ return this.loginForm.get('password');}
+
   onLoginSubmit() {
     this.submitted = true;
     if (this.loginForm.invalid){

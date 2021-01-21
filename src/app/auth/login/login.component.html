@@ -6,7 +6,7 @@
     <label for="email">Email</label>
     <input id="email" type="email" formControlName="email">
     <div class="err emailerr">
-      <div *ngIf="submitted || (!loginForm.get('email').valid&&loginForm.get('email').touched)">
+      <div *ngIf="submitted || (!email.errors?.valid&&email.errors?.touched)">
         <span class="error-red" *ngIf = "loginForm.get('email').hasError('pattern')">Entered data has error!</span>
         <span class="error-red" *ngIf = "loginForm.get('email').hasError('required')">Field is required!</span>
         </div> 
